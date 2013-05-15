@@ -7,6 +7,7 @@ goog.require('lime.animation.MoveTo');
 goog.require('lime.animation.ScaleTo');
 goog.require('lime.animation.Spawn');
 goog.require('rb.TileButton');
+goog.require('rb.TileCountDown');
 goog.require('rb.MultiMove');
 
 /**
@@ -69,6 +70,17 @@ rb.Board = function(game) {
     {
         this.gameBoard.setChildIndex(this.nodeTargets[i], this.gameBoard.getNumberOfChildren() - 1);
     }
+
+    // Add countdown timer
+    this.countDown = new rb.TileCountDown();
+    this.countDown.setPosition(this.nodeTargets[5].getPosition());
+    this.countDown.setSize(this.GAP / 2 , this.GAP / 2);
+
+    this.nodeTargets[5].setHidden(true);
+
+    this.gameBoard.appendChild(this.countDown, this.gameBoard.getNumberOfChildren() - 1);  
+
+    this.eventTarget = new goog.events.EventTarget();
 };
 
 goog.inherits(rb.Board, lime.Sprite);
@@ -92,7 +104,7 @@ rb.Board.prototype.createBoard = function() {
                 var nodeTarget = new rb.TileButton.type("game");
                 nodeTarget.setPosition((c + .5) * this.GAP, (r + .5) * this.GAP);
                 nodeTarget.setSize(this.GAP / 2 , this.GAP / 2);
-                this.gameBoard.appendChild(nodeTarget);     
+                this.gameBoard.appendChild(nodeTarget, this.gameBoard.getNumberOfChildren() - 1);    
 
                 this.nodeTargets.push(nodeTarget); 
 
@@ -134,6 +146,24 @@ rb.Board.prototype.findDistance = function(point1, point2)
 {
     return goog.math.Coordinate.distance(point1, point2);
 }
+
+/**
+ * 
+ */
+rb.Board.prototype.startCountDown = function() {
+
+    this.countDown.startCountDown();
+
+    goog.events.listen(this.countDown.getEventTarget(), 'end', function(e){
+        
+            this.nodeTargets[5].setHidden(false);
+        }, false, this); 
+};
+
+rb.Board.prototype.getCountDown = function() {
+
+    return this.countDown;
+};
 
 rb.Board.prototype.setRandomNumbers = function(randomArray1, targets1, randomArray2, targets2)
 {
@@ -196,11 +226,6 @@ rb.Board.prototype.selectRandom = function(e)
 {
     var randomNumber = Math.floor(Math.random() * 12);
     
-    this.nodeTargets[randomNumber].select();
-
-    return this.nodeTargets[randomNumber];
-
-    /*
     if(randomNumber != this.selectedNode)
     {
         if(this.selectedNode != null)
@@ -216,7 +241,6 @@ rb.Board.prototype.selectRandom = function(e)
     {
         this.selectRandom();
     } 
-    */
 }
 
 rb.Board.prototype.reset = function(e)

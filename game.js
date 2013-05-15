@@ -19,8 +19,10 @@ rb.Game = function(size) {
     var layer = new lime.Layer();
     this.appendChild(layer);
 
+    /* Need to update logo TEMP
     var smallLogo = new lime.Sprite().setFill('assets/ingame-logo-x40y32-HexBG-272528.gif').setAnchorPoint(0, 0).setPosition(35, 35);
     layer.appendChild(smallLogo, 1);
+    */
 
     //make board
     this.board = new rb.Board(this).setPosition(25, 174);
@@ -29,70 +31,71 @@ rb.Game = function(size) {
 
     this.start = Date.now();
 
-    // score label
-    var score_lbl = new lime.Label().setFontFamily('HelveticaNeueW01-45Ligh').setFontColor('#ffffff').setFontSize(24).
-        setPosition(30, 22).setText('Score:').setAnchorPoint(0, 0).setStroke(new lime.fill.Stroke(1, '#ffffff'));
-    layer.appendChild(score_lbl);
+    var timeBackground = new lime.Sprite().setFill('#3a3b3c').setAnchorPoint(0, 0).setSize(70, 45).setPosition(630, 10);
 
-    // score
-    this.scoreText = new lime.Label().setFontFamily('HelveticaNeueW01-45Ligh').setFontColor('#ffffff').setFontSize(24).setText(0).setPosition(115, 22).
-        setAnchorPoint(0, 0).setStroke(new lime.fill.Stroke(1, '#ffffff'));
-    layer.appendChild(this.scoreText);
+    if(rb.Mode.DEBUG)
+    timeBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
-    // response time label
-    var responseTime_lbl = new lime.Label().setFontFamily('HelveticaNeueW01-45Ligh').setFontColor('#ffffff').setFontSize(24).
-        setPosition(200, 22).setText('Average Response Time:').setAnchorPoint(0, 0).setFontWeight(100).setSize(0, 0).setStroke(new lime.fill.Stroke(1, '#ffffff'));
-    layer.appendChild(responseTime_lbl);
+    layer.appendChild(timeBackground, 3);
 
-    // response time
-    this.responseTimeText = new lime.Label().setFontFamily('HelveticaNeueW01-45Ligh').setFontColor('#ffffff').setFontSize(24).setText(0).setPosition(475, 22).
-        setAnchorPoint(0, 0).setStroke(new lime.fill.Stroke(1, '#ffffff'));
-    layer.appendChild(this.responseTimeText);
+    this.timeText = new lime.Label().setText("00").setFontFamily('FrutigerNeue1450W01-Bol 1196308').setFontColor('#ffffff').setFontWeight(500).setFontSize(36).
+        setAlign('center').setAnchorPoint(0, 0).setSize(70, 45).setPosition(630, 10);;
+    
+    if(rb.Mode.DEBUG)
+    this.timeText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
-    // time remaining label
-    var timeRemaining_lbl = new lime.Label().setFontFamily('HelveticaNeueW01-45Ligh').setFontColor('#ffffff').setFontSize(24).
-        setPosition(30, 50).setText('Time:').setAnchorPoint(0, 0).setFontWeight(100).setSize(0, 0).setStroke(new lime.fill.Stroke(1, '#ffffff'));
-    layer.appendChild(timeRemaining_lbl);
+    layer.appendChild(this.timeText, 3);
 
-    this.maxTime = 15;
-    this.curTime = 15;
+    var timeHeading = new lime.Label().setText('time').setFontFamily('FrutigerNeue1450W01-Bol 1196308').setFontColor('#ffffff').setFontWeight(300).setFontSize(36).
+        setAlign('right').setAnchorPoint(1, 0).setSize(150, 45).setPosition(630, 10);
 
-    // time text
-    this.timeText = new lime.Label().setFontFamily('HelveticaNeueW01-45Ligh').setFontColor('#ffffff').setFontSize(24).setText(this.maxTime).setPosition(115, 50).
-        setAnchorPoint(0, 0).setStroke(new lime.fill.Stroke(1, '#ffffff'));
-    layer.appendChild(this.timeText);
+    if(rb.Mode.DEBUG)
+    timeHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+           
+    layer.appendChild(timeHeading, 4);
 
-    //.setFontWeight()
+    var scoreBackground = new lime.Sprite().setFill('#3a3b3c').setAnchorPoint(0, 0).setSize(95, 45).setPosition(415, 10);
+
+    if(rb.Mode.DEBUG)
+    scoreBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+
+    layer.appendChild(scoreBackground, 5);
+
+    this.scoreText = new lime.Label().setText("000").setFontFamily('FrutigerNeue1450W01-Bol 1196308').setFontColor('#ffffff').setFontWeight(500).setFontSize(36).
+        setAlign('center').setAnchorPoint(0, 0).setSize(95, 45).setPosition(415, 10);
+    
+    if(rb.Mode.DEBUG)
+    this.scoreText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+
+    layer.appendChild(this.scoreText, 6);
+
+    var scoreHeading = new lime.Label().setText('score').setFontFamily('FrutigerNeue1450W01-Bol 1196308').setFontColor('#ffffff').setFontWeight(300).setFontSize(36).
+        setAlign('right').setAnchorPoint(1, 0).setSize(95, 45).setPosition(415, 10);
+
+    if(rb.Mode.DEBUG)
+    scoreHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+           
+    this.currentTime = 30;
+
+    layer.appendChild(scoreHeading, 7);
 
     layer.appendChild(this.board);
-
-    // Menu button
-    this.btn_menu = new rb.Button('Menu').setSize(140, 70).setPosition(100, 945);
-    goog.events.listen(this.btn_menu, 'click', function() {
-        rb.loadMenu();
-    });
-    this.appendChild(this.btn_menu);
-
-    // Hint button
-    this.btn_hint = new rb.Button('Hint').setSize(140, 70).setPosition(640, 945).setOpacity(0);
-    goog.events.listen(this.btn_hint, 'click', function() {
-        if (this.hint)
-        this.board.showHint();
-    },false, this);
-    this.appendChild(this.btn_hint);
-
-    // lime.scheduleManager.scheduleWithDelay(this.decreaseTime, this, 1000);
-
-     // update score when points have changed
-    lime.scheduleManager.scheduleWithDelay(this.updateResponseTime, this, 100);
-
-    lime.scheduleManager.scheduleWithDelay(this.updateScore, this, 100);
-
-     // show lime logo
-    rb.builtWithLime(this);
 };
 
 goog.inherits(rb.Game, lime.Scene);
+
+
+/**
+ * 
+ */
+rb.Game.prototype.startGame = function() {
+
+    lime.scheduleManager.scheduleWithDelay(this.decreaseTime, this, 1000);
+
+    lime.scheduleManager.scheduleWithDelay(this.updateResponseTime, this, 100);
+
+    lime.scheduleManager.scheduleWithDelay(this.updateScore, this, 100);
+}
 
 /**
  * Finds all factors of a given number
@@ -166,7 +169,6 @@ rb.Game.prototype.setScore = function(p) {
  * Update response time
  */
 rb.Game.prototype.setResponseTime = function() {
-
     var dateNow = Date.now();
     this.responseTime.push(dateNow - this.start);
     this.start = dateNow;
@@ -184,18 +186,20 @@ rb.Game.prototype.updateResponseTime = function() {
         total += this.responseTime[i];
     };
 
-    this.responseTimeText.setText((total / length) / 1000);
+    // this.responseTimeText.setText((total / length) / 1000);
 };
 
 /**
  * Subtract one second from left time in timed mode
  */
 rb.Game.prototype.decreaseTime = function() {
-    this.curTime--;
+    this.currentTime--;
 
-    this.timeText.setText(this.curTime);
+    console.log()
+    
+    this.timeText.setText(this.currentTime);
 
-    if (this.curTime < 1) {
+    if (this.currentTime < 1) {
         this.endGame();
     }
 };
@@ -214,7 +218,7 @@ rb.Game.prototype.endGame = function() {
         setAnchorPoint(.5, 0).setRadius(20);
     this.appendChild(dialog);
 
-    var title = new lime.Label().setText(this.curTime < 1 ? 'No more time!' : 'No more moves!').
+    var title = new lime.Label().setText(this.currentTime < 1 ? 'No more time!' : 'No more moves!').
         setFontColor('#ddd').setFontSize(40).setPosition(0, 70);
     dialog.appendChild(title);
 
@@ -237,35 +241,4 @@ rb.Game.prototype.endGame = function() {
     goog.events.listen(btn, lime.Button.Event.CLICK, function() {
         rb.loadMenu();
     });
-};
-
-/**
- * Register new hint from board object. Activate button
- * if no action soon
- * @param {rb.Gem} hint Hint gem.
- */
-rb.Game.prototype.setHint = function(hint) {
-    this.hint = hint;
-    if (!goog.isDef(hint)) {
-        return this.endGame();
-    }
-    else {
-        lime.scheduleManager.callAfter(this.showHint, this, 3500);
-    }
-};
-
-/**
- * Hide hint button
- */
-rb.Game.prototype.clearHint = function() {
-    lime.scheduleManager.unschedule(this.showHint, this);
-    this.btn_hint.runAction(new lime.animation.FadeTo(0));
-    delete this.hint;
-};
-
-/**
- * Show hint button
- */
-rb.Game.prototype.showHint = function() {
-    this.btn_hint.runAction(new lime.animation.FadeTo(1));
 };

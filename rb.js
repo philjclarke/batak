@@ -41,8 +41,6 @@ rb.start = function() {
     var pseudoRandom = new goog.testing.PseudoRandom(109);
     pseudoRandom.install();
 	*/
-	
-	// rb.loadMenu();
 };
 
 rb.showSplash = function() {
@@ -54,25 +52,44 @@ rb.showSplash = function() {
 	    setFill('#f9f8f7').setAnchorPoint(0,0);
 	layer.appendChild(background);
 
-	var logo = new lime.Sprite().setFill('assets/screen1-x145y266-HexBG-f9f8f7.gif').setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT / 2).setOpacity(0);
+	var logo = new lime.Sprite().setFill('assets/splash1.gif').setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT / 2);
 	layer.appendChild(logo);
-
-	var fade = new lime.animation.FadeTo(1).setDuration(1);
-
-	if(rb.Mode.DEBUG)
-		fade.setDuration(0);
-	
-	logo.runAction(fade)
 
 	scene.appendChild(layer);
 
 	rb.director.replaceScene(scene);
 
-	var test = this;
+  	lime.scheduleManager.callAfter(function(){
+	    
+	    rb.showSplash1()
 
-	goog.events.listen(fade, lime.animation.Event.STOP, function(){
-	    rb.showStart();
-	})
+	 }, this, 1000);
+}
+
+rb.showSplash1 = function() {
+
+    var scene = new lime.Scene(),
+	    layer = new lime.Layer().setPosition(0, 0);
+	
+	var background = new lime.Sprite().setSize(rb.WIDTH,rb.HEIGHT).
+	    setFill('#333333').setAnchorPoint(0,0);
+	layer.appendChild(background);
+
+	var logo = new lime.Sprite().setFill('assets/splash2.gif').setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT / 2);
+	layer.appendChild(logo);
+
+	scene.appendChild(layer);
+
+	if(rb.Mode.DEBUG)
+	rb.director.replaceScene(scene);
+	else
+	rb.director.replaceScene(scene, lime.transitions.SlideInRight);
+
+  	lime.scheduleManager.callAfter(function(){
+	    
+	    rb.showStart()
+
+	 }, this, 2000);
 }
 
 rb.showStart = function() {
@@ -87,8 +104,14 @@ rb.showStart = function() {
 		layer.appendChild(background);
 	}    
 
-	var logo = new lime.Sprite().setFill('assets/screen2-x96y135-HexBG-272528.gif').setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT * 0.40);
-	layer.appendChild(logo);
+    var smallLogo = new lime.Sprite().setFill('assets/scientists_in_sport_logo.png').setAnchorPoint(0, 0).setPosition(45, 70);
+    layer.appendChild(smallLogo, 1);
+
+    var smallLogo1 = new lime.Sprite().setFill('assets/gsk_logo.png').setAnchorPoint(0, 0).setPosition(500, 60);
+    layer.appendChild(smallLogo1, 1);
+
+	var gameImage = new lime.Sprite().setFill('assets/reaction_test.png').setAnchorPoint(0, 0).setPosition(0, 200);
+	layer.appendChild(gameImage);
 
 	var startButton = new rb.TileButton.type("start").setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT * 0.85);
 
@@ -141,7 +164,12 @@ rb.loadGame = function() {
 
 	scene.setPosition(0, 0)
 
-	rb.director.replaceScene(scene, lime.transitions.SlideInRight);
+	var transition = rb.director.replaceScene(scene, lime.transitions.SlideInRight);
+
+	goog.events.listenOnce(transition,'end', function() {
+
+		scene.startGame();  
+	});
 }
 
 
@@ -267,7 +295,7 @@ rb.makeButton = function(size){
 // load new game scene
 rb.newgame = function(level) {
 
-    var scene = new rb.Level3();
+    var scene = new rb.Level1();
     scene.setPosition(0, 0)
 	rb.director.replaceScene(scene, lime.transitions.SlideInRight);
 };

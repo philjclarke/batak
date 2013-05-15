@@ -1,7 +1,7 @@
 goog.provide('rb.Variables');
 
 rb.Mode = {
-    DEBUG: true 
+    DEBUG: false 
 }    
 
 rb.GAME = {
@@ -11,7 +11,8 @@ rb.GAME = {
 
 rb.LEVEL1 = {
     TILES: 12,
-    INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+    INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    TIME: 20
 };
 
 rb.LEVEL2 = {

@@ -33,7 +33,7 @@ rb.TileButton = function() {
 
     this.qualityRenderer = true;
 
-    this.lbl = new lime.Label().setText('').setFontFamily('Signika').setFontColor('#ffffff').setFontWeight(500).setFontSize(36).
+    this.lbl = new lime.Label().setText('').setFontFamily('FrutigerNeue1450W01-Bol 1196308').setFontColor('#ffffff').setFontWeight(500).setFontSize(36).
         setAlign('center');
 
     if(rb.Mode.DEBUG)
@@ -43,7 +43,10 @@ rb.TileButton = function() {
 
     this.animating = false;
     this.eventTarget = new goog.events.EventTarget();
-    goog.events.listen(this.buttonImage, ['mousedown','touchstart'], this.animate, true, this);
+
+    goog.events.listen(this.buttonImage, ['mousedown','touchstart'], this.animate, true, this); // TEMP
+
+    this.selected = true;
 
     this.ios = (navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
 };
@@ -60,7 +63,7 @@ rb.TileButton.type = function(type) {
 
     if(type == "start" || type == "play")
     {
-        button.backgroundAnimation.setFill('assets/button-blue-interaction-121x121.png');
+        button.backgroundAnimation.setFill('assets/start-play-animation.png');
 
         if(this.ios)
         button.backgroundAnimation.setRotation(45);
@@ -69,14 +72,14 @@ rb.TileButton.type = function(type) {
 
         button.backgroundAnimation.setScale(1.5);
         button.backgroundAnimation.setHidden(true);
-        button.buttonImage.setFill('assets/button-blue-start.png');
+        button.buttonImage.setFill('assets/start-play-button.png');
 
         button.lbl.setSize(121, 50)
         button.lbl.setText(type);
     }    
     else if(type == "game")
     {
-        button.backgroundAnimation.setFill('assets/node-green-interaction.png');
+        button.backgroundAnimation.setFill('assets/node-green-interaction-whole.png');
 
         if(this.ios)
         button.backgroundAnimation.setRotation(45);
@@ -89,8 +92,6 @@ rb.TileButton.type = function(type) {
 
 
         button.lbl.setSize(91, 40)
-        button.lbl.setText(type);
-        button.lbl.setText('99');     
     }    
 
     return button;
@@ -105,34 +106,56 @@ rb.TileButton.prototype.animate = function(e) {
 
     if(target.animating == false)
     {
+        var animation;
+
         target.animating = true;
 
         target.backgroundAnimation.setHidden(false);
 
-        var animation1 = new lime.animation.RotateBy(180).setDuration(0.5);
-        var animation2 = new lime.animation.ScaleTo(1).setDuration(0.5);
-
-        if(target.ios)
+        if(target.selected)
+        {    
+            if(target.ios)
+            {
+                animation = new lime.animation.ScaleTo(1).setDuration(0.5).enableOptimizations();
+            }    
+            else
+            {
+                animation = new lime.animation.ScaleTo(1).setDuration(0.5);
+            }    
+        }
+        else
         {
-            animation1 = new lime.animation.RotateBy(180).setDuration(0.5);
-            animation1.enableOptimizations();
-            animation2.enableOptimizations(); 
-        }    
+            if(target.ios)
+            {
+                animation = new lime.animation.Spawn(
+                    new lime.animation.RotateBy(180).setDuration(0.5).enableOptimizations(),
+                    new lime.animation.ScaleTo(1).setDuration(0.5).enableOptimizations()
+                );
+            }    
+            else
+            {
+                target.backgroundAnimation.setFill('assets/node-green-interaction.png');
 
-        target.backgroundAnimation.runAction(animation1);
-        target.backgroundAnimation.runAction(animation2);
+                animation = new lime.animation.Spawn(
+                    new lime.animation.RotateBy(180).setDuration(0.5),
+                    new lime.animation.ScaleTo(1).setDuration(0.5)             
+                );
+            }
+        }   
 
-        goog.events.listen(animation1, lime.animation.Event.STOP, function(){
+        target.backgroundAnimation.runAction(animation);
 
-            target.backgroundAnimation.setRotation(45);
+        goog.events.listen(animation, lime.animation.Event.STOP, function(){
 
-            target.backgroundAnimation.setScale(1.5);
             target.backgroundAnimation.setHidden(true);
+            target.backgroundAnimation.setScale(1.5);
 
             target.animating = false;
 
-
-            target.eventTarget.dispatchEvent(target.lbl.getText());
+            if(target.selected)
+            {    
+                target.eventTarget.dispatchEvent(target.lbl.getText());
+            }
         })
     } 
 };
@@ -157,6 +180,34 @@ rb.TileButton.prototype.getText = function() {
 rb.TileButton.prototype.getEventTarget = function() {
     return this.eventTarget;
 };
+
+/**
+ * Select target. Show highlight
+ */
+rb.TileButton.prototype.select = function() {
+    if (this.selected) return;
+
+    var size = this.getSize().clone();
+
+    console.log(size);
+
+    this.highlight = new lime.Sprite().setFill('assets/node-green-on.png');
+    this.appendChild(this.highlight, 100);
+
+    this.selected = true;
+};
+
+/**
+ * Remove selection highlight
+ */
+rb.TileButton.prototype.deselect = function() {
+    if (!this.selected) return;
+
+    this.removeChild(this.highlight);
+
+    this.selected = false;
+};
+
 
 /**
  * @inheritDoc
