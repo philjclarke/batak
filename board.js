@@ -160,6 +160,18 @@ rb.Board.prototype.startCountDown = function() {
         }, false, this); 
 };
 
+rb.Board.prototype.startGame = function() {
+    
+    this.unpause();
+    this.selectRandom();
+};
+
+rb.Board.prototype.endGame = function() {
+   
+    this.resetBoard();
+    this.pause();
+};
+
 rb.Board.prototype.getCountDown = function() {
 
     return this.countDown;
@@ -225,15 +237,18 @@ rb.Board.prototype.setRandomNumbers = function(randomArray1, targets1, randomArr
 rb.Board.prototype.selectRandom = function(e)
 {
     var randomNumber = Math.floor(Math.random() * 12);
-    
+
     if(randomNumber != this.selectedNode)
     {
         if(this.selectedNode != null)
         this.nodeTargets[this.selectedNode].deselect();
 
+        console.log(randomNumber);
         this.nodeTargets[randomNumber].select();
 
         this.selectedNode = randomNumber;
+
+        
 
         return this.nodeTargets[randomNumber];
     }
@@ -243,7 +258,7 @@ rb.Board.prototype.selectRandom = function(e)
     } 
 }
 
-rb.Board.prototype.reset = function(e)
+rb.Board.prototype.resetBoard = function(e)
 {
     for (var i = 0; i < this.TARGETS; i++)
     {   
@@ -251,7 +266,21 @@ rb.Board.prototype.reset = function(e)
     };
 }
 
+rb.Board.prototype.pause = function(e)
+{
+    for (var i = 0; i < this.TARGETS; i++)
+    {   
+        this.nodeTargets[i].pause();
+    };
+}
 
+rb.Board.prototype.unpause = function(e)
+{
+    for (var i = 0; i < this.TARGETS; i++)
+    {   
+        this.nodeTargets[i].unpause();
+    };
+}
 
 
 

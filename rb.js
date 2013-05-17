@@ -15,6 +15,8 @@ goog.require('rb.Board');
 goog.require('rb.Button');
 goog.require('rb.TileButton');
 goog.require('rb.Level1');
+goog.require('rb.LevelEnd');
+
 // goog.require('rb.Level2');
 // goog.require('rb.Level3');
 
@@ -32,9 +34,21 @@ rb.start = function() {
 	rb.director = new lime.Director(document.body, rb.WIDTH, rb.HEIGHT);
 	rb.director.makeMobileWebAppCapable(); // Add support for adding game to Springboard as a web application on iOS devices
 
-	// rb.showSplash();
+	if(rb.Mode.DEBUG)
+	{	
 
-	rb.loadGame();
+		// rb.showSplash();
+
+		// rb.showStart();
+
+		// rb.loadGame();
+
+		rb.showLevelEnd();
+	}
+	else
+	{
+		rb.showSplash();
+	}	
 
 	/*
     //enable for non-seeded random. useful for debugging
@@ -113,6 +127,10 @@ rb.showStart = function() {
 	var gameImage = new lime.Sprite().setFill('assets/reaction_test.png').setAnchorPoint(0, 0).setPosition(0, 200);
 	layer.appendChild(gameImage);
 
+    var introText = new lime.Label().setText(rb.GAME.INTRO_TEXT).setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(18).
+        setAlign('left').setAnchorPoint(0, 0).setSize(650, 250).setPosition(30, 565);
+	layer.appendChild(introText);
+
 	var startButton = new rb.TileButton.type("start").setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT * 0.85);
 
 	layer.appendChild(startButton);
@@ -170,9 +188,29 @@ rb.loadGame = function() {
 
 		scene.startGame();  
 	});
+
+	goog.events.listenOnce(scene.getEventTarget(),'end', function() {
+
+		rb.showLevelEnd();  
+	});	
 }
 
+rb.showLevelEnd = function() {
 
+    // var levelEnd = new rb.LevelEnd(level, rb.LEVEL1.INTRO_TEXT, rb.GAME.HighScore);
+
+	var levelEnd = new rb.LevelEnd();
+
+	if(rb.Mode.DEBUG)
+	rb.director.replaceScene(levelEnd);
+	else
+	rb.director.replaceScene(levelEnd, lime.transitions.SlideInRight);
+
+	goog.events.listen(levelEnd.getEventTarget(), 'play', function(e){
+	
+	  // rb.loadGame(1);
+	});
+}
 
 
 

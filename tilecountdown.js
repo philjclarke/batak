@@ -10,8 +10,8 @@ goog.require('lime.animation.ScaleTo');
 goog.require('lime.animation.Sequence');
 goog.require('lime.animation.Spawn');
 goog.require('lime.animation.Loop');
-/**
 
+/**
  * Start button constructor
  * @constructor
  * @extends lime.Sprite
@@ -20,11 +20,10 @@ rb.TileCountDown = function() {
     // goog.base(this);
     lime.Sprite.call(this);
 
-    this.backgroundAnimation = new lime.Sprite().setAnchorPoint(0.5, 0.5).setPosition(0, 0);
-    this.backgroundAnimation.setFill('assets/node-green-interaction.png');
+    this.backgroundAnimation = new lime.Sprite().setAnchorPoint(0.5, 0.5).setPosition(0, 0).setSize(91,91);
     
     this.backgroundAnimation.setHidden(true);
-    this.backgroundAnimation.setScale(1.5);
+    this.backgroundAnimation.setScale(2);
     
     if(rb.Mode.DEBUG)
     this.backgroundAnimation.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -37,45 +36,65 @@ rb.TileCountDown = function() {
 
     this.buttonImages = new Array();
 
-    this.buttonImageBlue = new lime.Sprite();
-    this.buttonImageBlue.setFill('assets/countdown-blue.png');
+    this.buttonBlue = new lime.Sprite().setSize(151,151);
+    this.buttonBlue.setFill('assets/countdown-blue.png');
 
-    this.buttonImageOrange = new lime.Sprite();
-    this.buttonImageOrange.setFill('assets/countdown-orange.png');
+    this.buttonOrange = new lime.Sprite().setSize(151,151);
+    this.buttonOrange.setFill('assets/countdown-orange.png');
 
-    this.buttonImageGreen = new lime.Sprite();
-    this.buttonImageGreen.setFill('assets/countdown-orange.png');
+    this.buttonGreen = new lime.Sprite().setSize(151,151);
+    this.buttonGreen.setFill('assets/countdown-green-large.png');
 
-    this.appendChild(this.buttonImageBlue, this.getNumberOfChildren() - 1);
-    this.appendChild(this.buttonImageOrange, this.getNumberOfChildren() - 1);
-    this.appendChild(this.buttonImageGreen, this.getNumberOfChildren() - 1);
+    this.buttonAnimationBlue = new lime.Sprite().setSize(151,151);
+    this.buttonAnimationBlue.setFill('assets/node-blue-interaction-whole.png');
 
-    this.lbl = new lime.Label().setText('').setFontFamily('FrutigerNeue1450W01-Bol 1196308').setFontColor('#1e1e1e').setFontWeight(500).setFontSize(36).
+    this.buttonAnimationOrange = new lime.Sprite().setSize(151,151);
+    this.buttonAnimationOrange.setFill('assets/node-orange-interaction-whole.png');
+
+    this.buttonAnimationGreen = new lime.Sprite().setSize(151,151);
+    this.buttonAnimationGreen.setFill('assets/node-green-interaction-whole.png')
+
+    this.appendChild(this.buttonAnimationBlue, this.getNumberOfChildren() - 1);
+    this.appendChild(this.buttonAnimationOrange, this.getNumberOfChildren() - 1);
+    this.appendChild(this.buttonAnimationGreen, this.getNumberOfChildren() - 1);
+
+    this.appendChild(this.buttonBlue, this.getNumberOfChildren() - 1);
+    this.appendChild(this.buttonOrange, this.getNumberOfChildren() - 1);
+    this.appendChild(this.buttonGreen, this.getNumberOfChildren() - 1);
+
+    this.lbl = new lime.Label().setText('').setFontFamily(rb.GAME.FONT).setFontColor('#1e1e1e').setFontWeight(500).setFontSize(48).
         setAlign('center');
 
     if(rb.Mode.DEBUG)
     this.lbl.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
-    this.lbl.setSize(91, 40)
+    this.lbl.setSize(100, 60)
 
     this.appendChild(this.lbl, this.getNumberOfChildren() - 1);
 
     this.animating = false;
     this.eventTarget = new goog.events.EventTarget();
-    goog.events.listen(this.buttonImageBlue, ['mousedown','touchstart'], this.animate, true, this);
 
     this.counterIndex = null;
 
     this.ios = (navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false);
 
+    this.countDownIndex = 0;
     this.countDownArray = ["3", "2", "1", "GO"];
-    this.backgroundImageArray = [this.buttonImageBlue, this.buttonImageOrange, this.buttonImageGreen, this.buttonImageGreen];
-    this.animationImageArray = ["node-blue-interaction-whole.png", "node-orange-interaction-whole.png", "node-green-interaction-whole.png", "node-green-interaction-whole.png"];
+    // this.backgroundImageArray = [this.buttonBlue, this.buttonOrange, this.buttonGreen, this.buttonGreen];
+    // this.animationImageArray = [this.buttonAnimationBlue, this.buttonAnimationOrange, this.buttonAnimationGreen, this.buttonAnimationGreen];
 
-    for (var i = 0; i < this.backgroundImageArray.length; i++) 
-    {
-        this.backgroundImageArray[i].setHidden(true);
-    };    
+    this.backgroundImageArray = [this.buttonGreen, this.buttonGreen, this.buttonGreen, this.buttonGreen];
+    this.animationImageArray = [this.buttonAnimationGreen, this.buttonAnimationGreen, this.buttonAnimationGreen, this.buttonAnimationGreen];
+
+    this.buttonBlue.setHidden(true);
+    this.buttonOrange.setHidden(true);
+    this.buttonGreen.setHidden(false);
+
+    
+    this.buttonAnimationBlue.setHidden(true);
+    this.buttonAnimationOrange.setHidden(true);
+    this.buttonAnimationGreen.setHidden(false);
 };
 
 goog.inherits(rb.TileCountDown, lime.Sprite);
@@ -84,13 +103,33 @@ goog.inherits(rb.TileCountDown, lime.Sprite);
  * Start count down
  */
 rb.TileCountDown.prototype.startCountDown = function(e) {
+
     lime.scheduleManager.scheduleWithDelay(this.updateCounter, this, 1000, 4);
+};
+
+/**
+ * Show time up node
+ */
+rb.TileCountDown.prototype.showTimeUp = function(e) {
+
+    this.lbl.setText('time');
+
+    this.setHidden(false);
+    this.buttonGreen.setHidden(false);
+
+    this.buttonAnimationGreen.setScale(1.5);
+    this.buttonAnimationGreen.setHidden(false);
+
+    this.animate(this.buttonAnimationGreen, 1, 'time up');
+    this.lbl.setSize(100, 60);
+    // this.lbl.setFontSize(36);
+    // this.lbl.setPosition(3, -5);
 };
 
 /**
  * Animates button on click
  */
-rb.TileCountDown.prototype.animate = function(e) {
+rb.TileCountDown.prototype.animate = function(sprite, time, type) {
 
     var target = this;
 
@@ -102,150 +141,81 @@ rb.TileCountDown.prototype.animate = function(e) {
 
         target.animating = true;
 
-        target.backgroundAnimation.setHidden(false);
-
         if(target.ios)
         {
-            animation = new lime.animation.ScaleTo(1).setDuration(0.5).enableOptimizations();
+            animation = new lime.animation.ScaleTo(1).setDuration(time).enableOptimizations();
         }    
         else
         {
-            animation = new lime.animation.ScaleTo(1).setDuration(0.5);
+            animation = new lime.animation.ScaleTo(1).setDuration(time);
         }    
 
-        target.backgroundAnimation.runAction(animation);
+        sprite.runAction(animation);
 
         goog.events.listen(animation, lime.animation.Event.STOP, function(){
 
-            target.backgroundAnimation.setHidden(true);
-            target.backgroundAnimation.setScale(1.5);
+            sprite.setHidden(true);
+            sprite.setScale(1.5);
 
             target.animating = false;
 
-            if(target.backgroundImageArray.length == 0)   
+            if(target.countDownIndex > 3)   
             {
-                target.eventTarget.dispatchEvent('end');
+                this.countDownIndex = 0;
 
-                // Hide self
-                target.setHidden(true);
+                if(type == 'time up')
+                {
+                    lime.scheduleManager.callAfter(function(){
+                        
+                        target.eventTarget.dispatchEvent(type);
+
+                        // Hide self
+                        target.setHidden(true);
+
+                     }, this, 1000);
+                } 
+                else
+                {
+                    target.setHidden(true);
+
+                    target.eventTarget.dispatchEvent(type);
+                }  
             }
         })
     } 
-
-    /*
-    var target = this;
-
-    if(target.animating == false)
-    {
-        target.animating = true;
-
-        this.counterIndex = 3;
-        this.lbl.setText('');
-
-        target.backgroundAnimation.setHidden(false);
-
-        this.backgroundAnimation.setRotation(45);
-
-        var animationStart = new lime.animation.ScaleTo(1.5).setDuration(1).enableOptimizations();
-
-
-        var animationRotate1 = new lime.animation.RotateBy(0).setDuration(1).enableOptimizations();
-        var animationRotate2 = new lime.animation.RotateBy(180).setDuration(1).enableOptimizations();
-        var animationRotate3 = new lime.animation.RotateBy(180).setDuration(1).enableOptimizations();
-
-        var animationEnd = new lime.animation.Loop(
-            new lime.animation.RotateBy(180).setDuration(1).enableOptimizations()  
-        );
-
-        // target.backgroundAnimation.runAction(animationEnd);
-
-        
-        if(target.ios)
-        {
-            animationStart.enableOptimizations();
-            animationRotate1.enableOptimizations();
-            animationRotate2.enableOptimizations();
-            animationRotate3.enableOptimizations();
-            animationEnd.enableOptimizations();
-            animationSequence1.enableOptimizations();
-        }       
-        
-
-        var animationEnd = new lime.animation.Spawn(
-            new lime.animation.RotateBy(180).setDuration(1).enableOptimizations(),   
-            new lime.animation.ScaleTo(0.9).setDuration(1).enableOptimizations(),
-            new lime.animation.Delay().setDuration(1).enableOptimizations()
-        );
-
-        var animationSequence1 = new lime.animation.Sequence(
-            new lime.animation.RotateBy(180).setDuration(1).enableOptimizations(),
-            new lime.animation.RotateBy(180).setDuration(1).enableOptimizations()
-        );
-
-        target.lbl.setText('3');
-
-        target.backgroundAnimation.runAction(animationStart); 
-       
-        // target.backgroundAnimation.runAction(animationEnd);
-
-        target.backgroundAnimation.runAction(animationStart); 
-
-        goog.events.listen(animationStart, lime.animation.Event.STOP, function(){
-            
-            target.lbl.setText('2');
-
-            target.backgroundAnimation.runAction(new lime.animation.RotateBy(180).setDuration(1).enableOptimizations());
-
-        
-        });
-
-
-
-
-        goog.events.listen(animationRotate2, lime.animation.Event.STOP, function(){
-        
-            target.lbl.setText('1');
-
-            target.backgroundAnimation.runAction(animationRotate3);
-        }); 
-
-        goog.events.listen(animationRotate3, lime.animation.Event.STOP, function(){
-        
-            target.lbl.setText('GO');
-
-            target.backgroundAnimation.runAction(animationEnd);
-        }); 
-
-        goog.events.listen(animationEnd, lime.animation.Event.STOP, function(){
-        
-            target.backgroundAnimation.setHidden(true);
-
-            target.setHidden(true);
-
-            target.eventTarget.dispatchEvent('end');
-        });       
-    }
-         */   
 };
 
 /**
- * Sets button text
+ * Updates image counter
  */
 rb.TileCountDown.prototype.updateCounter = function(s) {
 
-    this.lbl.setText(this.countDownArray.shift());
+    this.lbl.setText(this.countDownArray[this.countDownIndex]);
+    
+    // var buttonImage = this.backgroundImageArray[this.countDownIndex].setHidden(false);
+    // var animationImage = this.animationImageArray[this.countDownIndex].setHidden(false);
 
-    for (var i = 0; i < this.backgroundImageArray.length; i++) 
+    var buttonImage = this.backgroundImageArray[this.countDownIndex];
+    var animationImage = this.animationImageArray[this.countDownIndex];
+
+    animationImage.setHidden(false);
+    animationImage.setScale(1.5);
+
+    this.setChildIndex(animationImage, this.getNumberOfChildren() - 1);
+    this.setChildIndex(buttonImage, this.getNumberOfChildren() - 1);
+
+    this.setChildIndex(this.lbl, this.getNumberOfChildren() - 1);
+
+    /*
+    if(this.countDownIndex != 0 && this.countDownIndex != 3)
     {
-        this.backgroundImageArray[i].setHidden(false);
-    };
+        // this.backgroundImageArray[this.countDownIndex - 1].setHidden(true);
+    }    
+    */
+    
+    this.animate(animationImage, 0.5, 'end');
 
-    // this.buttonImage.setFill('assets/' + this.backgroundImageArray.shift());
-
-    this.backgroundAnimation.setFill('assets/' + this.animationImageArray.shift());
-    this.animate();
-
-    console.log("boom");
+    this.countDownIndex = this.countDownIndex + 1;
 };
 
 /**

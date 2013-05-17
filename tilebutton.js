@@ -33,7 +33,7 @@ rb.TileButton = function() {
 
     this.qualityRenderer = true;
 
-    this.lbl = new lime.Label().setText('').setFontFamily('FrutigerNeue1450W01-Bol 1196308').setFontColor('#ffffff').setFontWeight(500).setFontSize(36).
+    this.lbl = new lime.Label().setText('').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontWeight(500).setFontSize(36).
         setAlign('center');
 
     if(rb.Mode.DEBUG)
@@ -44,9 +44,8 @@ rb.TileButton = function() {
     this.animating = false;
     this.eventTarget = new goog.events.EventTarget();
 
-    goog.events.listen(this.buttonImage, ['mousedown','touchstart'], this.animate, true, this); // TEMP
-
     this.selected = true;
+    this.paused = false;
 
     this.ios = (navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
 };
@@ -61,6 +60,8 @@ rb.TileButton.type = function(type) {
 
     var button = new rb.TileButton();
 
+    button.type = type;
+
     if(type == "start" || type == "play")
     {
         button.backgroundAnimation.setFill('assets/start-play-animation.png');
@@ -70,13 +71,37 @@ rb.TileButton.type = function(type) {
         else
         button.backgroundAnimation.setRotation(45);
 
-        button.backgroundAnimation.setScale(1.5);
+        
         button.backgroundAnimation.setHidden(true);
         button.buttonImage.setFill('assets/start-play-button.png');
 
-        button.lbl.setSize(121, 50)
+        button.buttonImage.setSize(161, 161);
+        button.backgroundAnimation.setSize(181, 181);
+        button.backgroundAnimation.setScale(1.5);
+
+        button.lbl.setSize(121, 45)
         button.lbl.setText(type);
-    }    
+
+        goog.events.listen(button.buttonImage, ['mousedown','touchstart'], button.animate, true, button);
+    } 
+    if(type == "restart level")
+    {
+        button.backgroundAnimation.setFill('assets/restart-grey-animation.png');
+
+        if(this.ios)
+        button.backgroundAnimation.setRotation(45);
+        else
+        button.backgroundAnimation.setRotation(45);
+
+        button.backgroundAnimation.setScale(1.5);
+        button.backgroundAnimation.setHidden(true);
+        button.buttonImage.setFill('assets/restart-button-grey.png');
+
+        button.lbl.setSize(151, 65)
+        button.lbl.setText(type);
+
+        goog.events.listen(button.buttonImage, ['mousedown','touchstart'], button.animate, true, button);
+    }         
     else if(type == "game")
     {
         button.backgroundAnimation.setFill('assets/node-green-interaction-whole.png');
@@ -90,12 +115,31 @@ rb.TileButton.type = function(type) {
         button.backgroundAnimation.setHidden(true);
         button.buttonImage.setFill('assets/node-green.png');
 
+        // Paused by default
+        button.paused = true;
+        button.selected = false;
 
         button.lbl.setSize(91, 40)
+
+        goog.events.listen(button, ['mousedown','touchstart'], button.animate, true, button);
     }    
 
     return button;
 };
+
+/**
+ * Prevents animation
+ */
+rb.TileButton.prototype.pause = function(e) {
+    this.paused = true;
+}
+
+/**
+ * Allows animation
+ */
+rb.TileButton.prototype.unpause = function(e) {
+    this.paused = false;
+}
 
 /**
  * Animates button on click
@@ -104,7 +148,7 @@ rb.TileButton.prototype.animate = function(e) {
 
     var target = this;
 
-    if(target.animating == false)
+    if(target.animating == false && target.paused == false)
     {
         var animation;
 
@@ -113,7 +157,13 @@ rb.TileButton.prototype.animate = function(e) {
         target.backgroundAnimation.setHidden(false);
 
         if(target.selected)
-        {    
+        {
+            if(target.type == 'game')    
+            {
+                target.backgroundAnimation.setScale(1.8);
+                target.backgroundAnimation.setFill('assets/node-green-interaction-whole.png');
+            }
+                
             if(target.ios)
             {
                 animation = new lime.animation.ScaleTo(1).setDuration(0.5).enableOptimizations();
@@ -125,6 +175,8 @@ rb.TileButton.prototype.animate = function(e) {
         }
         else
         {
+            
+
             if(target.ios)
             {
                 animation = new lime.animation.Spawn(
@@ -134,8 +186,12 @@ rb.TileButton.prototype.animate = function(e) {
             }    
             else
             {
-                target.backgroundAnimation.setFill('assets/node-green-interaction.png');
-
+                if(target.type == 'game')
+                {
+                    target.backgroundAnimation.setScale(1.5);
+                    target.backgroundAnimation.setFill('assets/start-play-animation.png');
+                }    
+                
                 animation = new lime.animation.Spawn(
                     new lime.animation.RotateBy(180).setDuration(0.5),
                     new lime.animation.ScaleTo(1).setDuration(0.5)             
@@ -151,6 +207,9 @@ rb.TileButton.prototype.animate = function(e) {
             target.backgroundAnimation.setScale(1.5);
 
             target.animating = false;
+
+            console.log("target.selected");
+            console.log(target.selected);
 
             if(target.selected)
             {    

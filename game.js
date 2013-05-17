@@ -24,6 +24,13 @@ rb.Game = function(size) {
     layer.appendChild(smallLogo, 1);
     */
 
+    // TEMP
+    /*
+    var background = new lime.Sprite().setSize(rb.WIDTH,rb.HEIGHT).
+        setFill('#cccccc').setAnchorPoint(0,0);
+    layer.appendChild(background);
+    */
+    
     //make board
     this.board = new rb.Board(this).setPosition(25, 174);
     
@@ -31,55 +38,67 @@ rb.Game = function(size) {
 
     this.start = Date.now();
 
-    var timeBackground = new lime.Sprite().setFill('#3a3b3c').setAnchorPoint(0, 0).setSize(70, 45).setPosition(630, 10);
+
+    var timeBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(80, 50).setPosition(610, 10);
 
     if(rb.Mode.DEBUG)
     timeBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
     layer.appendChild(timeBackground, 3);
 
-    this.timeText = new lime.Label().setText("00").setFontFamily('FrutigerNeue1450W01-Bol 1196308').setFontColor('#ffffff').setFontWeight(500).setFontSize(36).
-        setAlign('center').setAnchorPoint(0, 0).setSize(70, 45).setPosition(630, 10);;
+    // Score
+    this.timeText = new lime.Label().setText('00').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(48).
+        setAlign('center').setAnchorPoint(0, 0).setSize(80, 50).setPosition(610, 9);
     
     if(rb.Mode.DEBUG)
     this.timeText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
-    layer.appendChild(this.timeText, 3);
+    layer.appendChild(this.timeText, 4);
 
-    var timeHeading = new lime.Label().setText('time').setFontFamily('FrutigerNeue1450W01-Bol 1196308').setFontColor('#ffffff').setFontWeight(300).setFontSize(36).
-        setAlign('right').setAnchorPoint(1, 0).setSize(150, 45).setPosition(630, 10);
+    // Highest score heading
+    var timeHeading = new lime.Label().setText('time').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
+        setAlign('right').setAnchorPoint(1, 0).setSize(250, 50).setPosition(595, 15);
 
     if(rb.Mode.DEBUG)
     timeHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
            
     layer.appendChild(timeHeading, 4);
 
-    var scoreBackground = new lime.Sprite().setFill('#3a3b3c').setAnchorPoint(0, 0).setSize(95, 45).setPosition(415, 10);
+
+
+
+
+
+    var scoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(100, 50).setPosition(410, 10);
 
     if(rb.Mode.DEBUG)
     scoreBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
-    layer.appendChild(scoreBackground, 5);
+    layer.appendChild(scoreBackground, 3);
 
-    this.scoreText = new lime.Label().setText("000").setFontFamily('FrutigerNeue1450W01-Bol 1196308').setFontColor('#ffffff').setFontWeight(500).setFontSize(36).
-        setAlign('center').setAnchorPoint(0, 0).setSize(95, 45).setPosition(415, 10);
+    // Score
+    this.scoreText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(48).
+        setAlign('center').setAnchorPoint(0, 0).setSize(100, 50).setPosition(410, 9);
     
     if(rb.Mode.DEBUG)
     this.scoreText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
-    layer.appendChild(this.scoreText, 6);
+    layer.appendChild(this.scoreText, 4);
 
-    var scoreHeading = new lime.Label().setText('score').setFontFamily('FrutigerNeue1450W01-Bol 1196308').setFontColor('#ffffff').setFontWeight(300).setFontSize(36).
-        setAlign('right').setAnchorPoint(1, 0).setSize(95, 45).setPosition(415, 10);
+    // Highest score heading
+    var scoreHeading = new lime.Label().setText('score').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
+        setAlign('right').setAnchorPoint(1, 0).setSize(250, 50).setPosition(395, 15);
 
     if(rb.Mode.DEBUG)
     scoreHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
            
-    this.currentTime = 30;
+    layer.appendChild(scoreHeading, 4);
 
-    layer.appendChild(scoreHeading, 7);
+
 
     layer.appendChild(this.board);
+
+    this.eventTarget = new goog.events.EventTarget();    
 };
 
 goog.inherits(rb.Game, lime.Scene);
@@ -204,41 +223,41 @@ rb.Game.prototype.decreaseTime = function() {
     }
 };
 
+rb.Game.prototype.removeEventListeners = function()
+{
+    lime.scheduleManager.unschedule(this.decreaseTime, this);
+
+    lime.scheduleManager.unschedule(this.updateResponseTime, this);
+
+    lime.scheduleManager.unschedule(this.updateScore, this);
+
+    for (var i = 0; i < this.board.nodeTargets.length; i++)
+    {    
+        goog.events.unlisten(this.board.nodeTargets[i],['mousedown','touchstart'], goog.partial(this.pressHandler, this));
+    };
+}
+
 /**
  * Show game-over dialog
  */
 rb.Game.prototype.endGame = function() {
 
-   // unregister the event listeners and schedulers
-   goog.events.unlisten(this.board, ['mousedown', 'touchstart'], this.board.pressHandler_);
-   lime.scheduleManager.unschedule(this.updateScore, this);
-   lime.scheduleManager.unschedule(this.decreaseTime, this);
+    this.removeEventListeners();
 
-    var dialog = new lime.RoundedRect().setFill(0, 0, 0, .7).setSize(500, 480).setPosition(360, 260).
-        setAnchorPoint(.5, 0).setRadius(20);
-    this.appendChild(dialog);
+    this.board.endGame();
 
-    var title = new lime.Label().setText(this.currentTime < 1 ? 'No more time!' : 'No more moves!').
-        setFontColor('#ddd').setFontSize(40).setPosition(0, 70);
-    dialog.appendChild(title);
+    this.board.getCountDown().showTimeUp(); 
 
-    var score_lbl = new lime.Label().setText('Your score:').setFontSize(24).setFontColor('#ccc').setPosition(0, 145);
-    dialog.appendChild(score_lbl);
+    goog.events.listenOnce(this.board.getCountDown().getEventTarget(), 'time up', function(e){
+            
+            this.eventTarget.dispatchEvent('end');
 
-    var score = new lime.Label().setText(this.points).setFontSize(150).setFontColor('#fff').
-        setPosition(0, 240).setFontWeight(700);
-    dialog.appendChild(score);
+        }, false, this);
+};
 
-    var btn = new rb.Button().setText('TRY AGAIN').setSize(200, 90).setPosition(-110, 400);
-    dialog.appendChild(btn);
-    goog.events.listen(btn, lime.Button.Event.CLICK, function() {
-         rb.newgame(this.board.cols);
-    },false, this);
-
-
-    var btn = new rb.Button().setText('MAIN MENU').setSize(200, 90).setPosition(110, 400);
-    dialog.appendChild(btn);
-    goog.events.listen(btn, lime.Button.Event.CLICK, function() {
-        rb.loadMenu();
-    });
+/**
+ * Returns event target. Dispatches events
+ */
+rb.Game.prototype.getEventTarget = function() {
+    return this.eventTarget;
 };
