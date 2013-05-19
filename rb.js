@@ -180,6 +180,8 @@ rb.loadGame = function() {
 		break;				
 	}
 
+	console.log(rb.GAME.Level);
+
 	scene.setPosition(0, 0)
 
 	var transition = rb.director.replaceScene(scene, lime.transitions.SlideInRight);
@@ -191,8 +193,10 @@ rb.loadGame = function() {
 
 	goog.events.listenOnce(scene.getEventTarget(),'end', function() {
 
+		console.log("test");
+
 		rb.showLevelEnd();  
-	});	
+	});
 }
 
 rb.showLevelEnd = function() {
@@ -206,10 +210,12 @@ rb.showLevelEnd = function() {
 	else
 	rb.director.replaceScene(levelEnd, lime.transitions.SlideInRight);
 
+	/*
 	goog.events.listen(levelEnd.getEventTarget(), 'play', function(e){
 	
 	  // rb.loadGame(1);
 	});
+	*/
 }
 
 

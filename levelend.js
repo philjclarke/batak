@@ -9,6 +9,7 @@ rb.LevelEnd = function(level, score, art, highestScore, art1) {
     lime.Scene.call(this);
 
     var layer = new lime.Layer().setPosition(0, 0);
+    var padding = 20;
 
     if(rb.Mode.DEBUG)
     {
@@ -17,56 +18,55 @@ rb.LevelEnd = function(level, score, art, highestScore, art1) {
         layer.appendChild(background);
     }    
 
-    /*
     var headerBackground = new lime.Sprite().setFill('assets/header.png').setAnchorPoint(0, 0).setPosition(0, 0);
-    layer.appendChild(headerBackground);
-    */
+    layer.appendChild(headerBackground, 1);
 
-    // Game thumb
-    var gameThumb = new lime.Sprite().setFill('assets/green-blobs-small-490x19.png').setAnchorPoint(1, 0).setPosition(515, 30);
-
-    if(rb.Mode.DEBUG)
-    gameThumb.setStroke(new lime.fill.Stroke(1, '#ffffff'));    
-    
-    layer.appendChild(gameThumb, 4);
-
+    var backgroundHeight = headerBackground.getSize().height;
 
     // Level heading
     var level = 1; // TEMP
     var levelHeading = new lime.Label().setText('level ' + level).setFontFamily('arial, sans-serif').setFontColor('#ffffff').setFontWeight(500).setFontSize(48).
-        setAlign('left').setAnchorPoint(0, 0).setSize(150, 50).setPosition(530, 20);
+        setAlign('left').setAnchorPoint(0, 0.5).setSize(150, 50).setPosition(530, backgroundHeight / 2);
     
     if(rb.Mode.DEBUG)
     levelHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
     layer.appendChild(levelHeading, 3);
 
-
-    // Results heading
-    var resultsHeading = new lime.Label().setText('results').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontWeight(500).setFontSize(48).
-        setAlign('right').setAnchorPoint(1, 0).setSize(180, 50).setPosition(270, 222);
+    // Game thumb
+    var gameThumb = new lime.Sprite().setFill('assets/green-blobs-small-490x19.png').setAnchorPoint(1, 0.5).setPosition(530 - padding, backgroundHeight / 2);
 
     if(rb.Mode.DEBUG)
-    resultsHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'))
+    gameThumb.setStroke(new lime.fill.Stroke(1, '#ffffff'));    
+    
+    layer.appendChild(gameThumb, 4);
+
+    // Level 1 heading
+    var resultsHeading = new lime.Label().setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(48).
+        setAlign('right').setAnchorPoint(1, 0).setSize(160, 150).setPosition(rb.WIDTH * 0.3 - (padding / 2), 150);
+
+    resultsHeading.setText('results');
+
+    if(rb.Mode.DEBUG)
+    resultsHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
     layer.appendChild(resultsHeading, 5);
 
-
-    // Results text
+    // Level text
     var resultsText = new lime.Label().setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(24).
-        setAlign('left').setAnchorPoint(0, 0).setSize(350, 100).setPosition(310, 222);
+        setAlign('left').setAnchorPoint(0, 0).setSize(450, 150).setPosition(rb.WIDTH * 0.3 + (padding / 2), 150);
 
     if(rb.Mode.DEBUG)
     resultsText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
-    layer.appendChild(resultsText, 6);
-
     resultsText.setText(rb.RESULTS.INTRO_TEXT);
+
+    layer.appendChild(resultsText, 5);
 
 
     // Your score heading
-    var yourScoreHeading = new lime.Label().setText('your score').setFontFamily('FrutigerNeue1450W01-Reg').setFontColor('#ffffff').setFontSize(24).
-        setAlign('right').setAnchorPoint(1, 0).setSize(100, 60).setPosition(200, 410);
+    var yourScoreHeading = new lime.Label().setText('your score').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(24).
+        setAlign('right').setAnchorPoint(1, 0).setSize(75, 75).setPosition(rb.WIDTH * 0.2 - (padding / 2), 410);
 
     if(rb.Mode.DEBUG)
     yourScoreHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -75,7 +75,7 @@ rb.LevelEnd = function(level, score, art, highestScore, art1) {
 
 
     // Your score background
-    var yourScoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(115, 60).setPosition(215, 410);
+    var yourScoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.2 + (padding / 2), 410);
 
     if(rb.Mode.DEBUG)
     yourScoreBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -84,8 +84,8 @@ rb.LevelEnd = function(level, score, art, highestScore, art1) {
 
 
     // Score
-    this.scoreText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(48).
-        setAlign('center').setAnchorPoint(0, 0).setSize(115, 60).setPosition(215, 410);
+    this.scoreText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(80).
+        setAlign('center').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.2 + padding / 2, 410);
     
     if(rb.Mode.DEBUG)
     this.scoreText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -93,103 +93,104 @@ rb.LevelEnd = function(level, score, art, highestScore, art1) {
     layer.appendChild(this.scoreText, 2);
 
 
-
-
-
-
-
-
-
-    /*
-
-    var yourScoreHeading = new lime.Label().setText('your score').setFontFamily('FrutigerNeue1450W01-Reg').setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(1, 0).setSize(160, 50).setPosition(200, 410);
+    // Your average reaction time heading
+    var yourARTHeading = new lime.Label().setText('your average reaction time').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(24).
+        setAlign('right').setAnchorPoint(1, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.7 - (padding / 2), 410);
 
     if(rb.Mode.DEBUG)
-    yourScoreHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+    yourARTHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+
+    layer.appendChild(yourARTHeading);
 
 
-    var yourScoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(80, 50).setPosition(205, 410);
+    // Your average reaction time background
+    var yourARTBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.7 + (padding / 2), 410);
 
     if(rb.Mode.DEBUG)
-    yourScoreBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+    yourARTBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
+    layer.appendChild(yourARTBackground, 1);
+
+    // Your average reaction time text
+    this.yourARTText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(80).
+        setAlign('center').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.7 + padding / 2, 410);
     
+    if(rb.Mode.DEBUG)
+    this.yourARTText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
+    layer.appendChild(this.yourARTText, 2);
 
+    ///////////////////////////////
 
-
-    var artHeading = new lime.Label().setText('your average reaction time').setFontFamily('FrutigerNeue1450W01-Reg').setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(1, 0).setSize(160, 50).setPosition(505, 410);
+    // Your score heading
+    var highestScoreHeading = new lime.Label().setText('your score').setFontFamily(rb.GAME.FONT).setFontColor('#77B800').setFontSize(24).
+        setAlign('right').setAnchorPoint(1, 0).setSize(75, 75).setPosition(rb.WIDTH * 0.2 - (padding / 2), 500);
 
     if(rb.Mode.DEBUG)
-    artHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+    highestScoreHeading.setStroke(new lime.fill.Stroke(1, '#77B800'));
 
-
-    var artBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(80, 50).setPosition(510, 410);
-
-    if(rb.Mode.DEBUG)
-    artBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
-
-
-
-
-
-
-    var highestScoreHeading = new lime.Label().setText('highest score').setFontFamily('FrutigerNeue1450W01-Reg').setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(1, 0).setSize(160, 50).setPosition(200, 515);
-
-    if(rb.Mode.DEBUG)
-    highestScoreHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
-
-    this.highestScoreText = new lime.Label().setText('000').setFontFamily('FrutigerNeue1450W01-Reg').setFontColor('#ffffff').setFontSize(36).
-        setAlign('left').setAnchorPoint(0, 0).setSize(160, 50).setPosition(205, 515);
-        
-    if(rb.Mode.DEBUG)
-    this.highestScoreText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
-
-
-
-
-
-
-    var bartHeading = new lime.Label().setText('best average reaction time').setFontFamily('FrutigerNeue1450W01-Reg').setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(1, 0).setSize(160, 50).setPosition(505, 515);
-
-    if(rb.Mode.DEBUG)
-    bartHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
-
-    this.bartText = new lime.Label().setText('000').setFontFamily('FrutigerNeue1450W01-Reg').setFontColor('#ffffff').setFontSize(36).
-        setAlign('left').setAnchorPoint(0, 0).setSize(160, 50).setPosition(510, 515);
-
-    if(rb.Mode.DEBUG)
-    this.bartText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
-
-
-    layer.appendChild(yourScoreHeading);
     layer.appendChild(highestScoreHeading);
-    layer.appendChild(this.highestScoreText);
-    layer.appendChild(artHeading);
-    layer.appendChild(bartHeading);
-    layer.appendChild(this.bartText);
-    layer.appendChild(artBackground);
-    layer.appendChild(yourScoreBackground);
+
+
+    // Your score background
+    var highestScoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.2 + (padding / 2), 500);
+
+    if(rb.Mode.DEBUG)
+    highestScoreBackground.setStroke(new lime.fill.Stroke(1, '#77B800'));
+
+    layer.appendChild(highestScoreBackground, 1);
+
+
+    // Score
+    this.highestScoreText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#77B800').setFontSize(80).
+        setAlign('center').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.2 + padding / 2, 500);
+    
+    if(rb.Mode.DEBUG)
+    this.highestScoreText.setStroke(new lime.fill.Stroke(1, '#77B800'));
+
+    layer.appendChild(this.highestScoreText, 2);
+
+
+    // Your average reaction time heading
+    var bestARTHeading = new lime.Label().setText('best average reaction time').setFontFamily(rb.GAME.FONT).setFontColor('#77B800').setFontSize(24).
+        setAlign('right').setAnchorPoint(1, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.7 - (padding / 2), 500);
+
+    if(rb.Mode.DEBUG)
+    bestARTHeading.setStroke(new lime.fill.Stroke(1, '#77B800'));
+
+    layer.appendChild(bestARTHeading);
+
+
+    // best average reaction time background
+    var bestARTBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.7 + (padding / 2), 500);
+
+    if(rb.Mode.DEBUG)
+    bestARTBackground.setStroke(new lime.fill.Stroke(1, '#77B800'));
+
+    layer.appendChild(bestARTBackground, 1);
 
 
 
 
-    this.restartButton = new rb.TileButton.type("restart level").setAnchorPoint(0.5, 0.5).setPosition(207,790);
+    // best average reaction time text
+    this.bestARTText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#77B800').setFontSize(80).
+        setAlign('center').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.7 + padding / 2, 500);
+    
+    if(rb.Mode.DEBUG)
+    this.bestARTText.setStroke(new lime.fill.Stroke(1, '#77B800'));
+
+    layer.appendChild(this.bestARTText, 2);
+
+
+    this.restartButton = new rb.TileButton.type("restart level").setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH * 0.25, 790);
 
     layer.appendChild(this.restartButton, 8);
 
     // Need coordinates
-    this.playButton = new rb.TileButton.type("play").setAnchorPoint(0.5, 0.5).setPosition(515,790);
+    this.playButton = new rb.TileButton.type("play").setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH * 0.75, 790);
 
     layer.appendChild(this.playButton, 7);
     
-        
-
-    */
 
     this.appendChild(layer);
 };

@@ -1,7 +1,7 @@
 goog.provide('rb.Variables');
 
 rb.Mode = {
-    DEBUG: false 
+    DEBUG: true 
 }    
 
 rb.GAME = {

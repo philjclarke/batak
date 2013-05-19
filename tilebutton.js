@@ -75,7 +75,7 @@ rb.TileButton.type = function(type) {
         button.backgroundAnimation.setHidden(true);
         button.buttonImage.setFill('assets/start-play-button.png');
 
-        button.buttonImage.setSize(161, 161);
+        button.buttonImage.setSize(171, 171);
         button.backgroundAnimation.setSize(181, 181);
         button.backgroundAnimation.setScale(1.5);
 
@@ -93,8 +93,12 @@ rb.TileButton.type = function(type) {
         else
         button.backgroundAnimation.setRotation(45);
 
+        button.buttonImage.setSize(171, 171);
+        button.backgroundAnimation.setSize(181, 181);
         button.backgroundAnimation.setScale(1.5);
+
         button.backgroundAnimation.setHidden(true);
+
         button.buttonImage.setFill('assets/restart-button-grey.png');
 
         button.lbl.setSize(151, 65)
