@@ -9,11 +9,14 @@ goog.require('rb.Progress');
  * @constructor
  * @extends lime.Scene
  */
-rb.Game = function(size) {
+rb.Game = function(level, eventTarget) {
     lime.Scene.call(this);
 
+    this.level = level;
+    this.currentTime = this.level.TIME;
     this.points = 0;
     this.responseTime = [0];
+    this.eventTarget = eventTarget;
 
     //empty layer for contents
     var layer = new lime.Layer();
@@ -36,32 +39,26 @@ rb.Game = function(size) {
     // Header background
     var headerBackground = new lime.Sprite().setFill('assets/header.png').setAnchorPoint(0, 0).setPosition(0, 0);
     layer.appendChild(headerBackground, 1);
-
-    var backgroundHeight = headerBackground.getSize().height;
-
-
-
-
-
     
+    console.log('et', eventTarget);
+
     //make board
-    this.board = new rb.Board(this).setPosition(25, 174);
+    this.board = new rb.Board(this, this.level, eventTarget).setPosition(25, 174);
     
     if(rb.isBrokenChrome()) this.board.setRenderer(lime.Renderer.CANVAS);
 
     this.start = Date.now();
 
-
-    var timeBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0.5).setSize(80, 50).setPosition(600, backgroundHeight / 2);
+    var timeBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0.5).setSize(80, 50).setPosition(600, rb.GAME.HEADER_HEIGHT / 2);
 
     if(rb.Mode.DEBUG)
     timeBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
     layer.appendChild(timeBackground, 3);
 
-    // Score
+    // Time
     this.timeText = new lime.Label().setText('00').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(48).
-        setAlign('center').setAnchorPoint(0, 0.5).setSize(80, 50).setPosition(600, backgroundHeight / 2);
+        setAlign('center').setAnchorPoint(0, 0.5).setSize(80, 50).setPosition(600, rb.GAME.HEADER_HEIGHT / 2);
     
     if(rb.Mode.DEBUG)
     this.timeText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -70,7 +67,7 @@ rb.Game = function(size) {
 
     // Highest score heading
     var timeHeading = new lime.Label().setText('time').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(1, 0.5).setSize(100, 50).setPosition(600 - padding, backgroundHeight / 2);
+        setAlign('right').setAnchorPoint(1, 0.5).setSize(100, 50).setPosition(600 - padding, rb.GAME.HEADER_HEIGHT / 2);
 
     if(rb.Mode.DEBUG)
     timeHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -78,7 +75,7 @@ rb.Game = function(size) {
     layer.appendChild(timeHeading, 4);
 
     // Highest score heading
-    var scoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0.5).setSize(100, 50).setPosition(400, backgroundHeight / 2);
+    var scoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0.5).setSize(100, 50).setPosition(350, rb.GAME.HEADER_HEIGHT / 2);
 
     if(rb.Mode.DEBUG)
     scoreBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -87,7 +84,7 @@ rb.Game = function(size) {
 
     // Score
     this.scoreText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(48).
-        setAlign('center').setAnchorPoint(0, 0.5).setSize(100, 50).setPosition(400, backgroundHeight / 2);
+        setAlign('center').setAnchorPoint(0, 0.5).setSize(100, 50).setPosition(350, rb.GAME.HEADER_HEIGHT / 2);
     
     if(rb.Mode.DEBUG)
     this.scoreText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -96,18 +93,14 @@ rb.Game = function(size) {
 
     // Highest score heading
     var scoreHeading = new lime.Label().setText('score').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(1, 0.5).setSize(150, 50).setPosition(400 - padding, backgroundHeight / 2);
+        setAlign('right').setAnchorPoint(1, 0.5).setSize(150, 50).setPosition(350 - padding, rb.GAME.HEADER_HEIGHT / 2);
 
     if(rb.Mode.DEBUG)
     scoreHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
            
     layer.appendChild(scoreHeading, 4);
 
-
-
     layer.appendChild(this.board);
-
-    this.eventTarget = new goog.events.EventTarget();    
 };
 
 goog.inherits(rb.Game, lime.Scene);
@@ -120,9 +113,54 @@ rb.Game.prototype.startGame = function() {
 
     lime.scheduleManager.scheduleWithDelay(this.decreaseTime, this, 1000);
 
-    lime.scheduleManager.scheduleWithDelay(this.updateResponseTime, this, 100);
-
     lime.scheduleManager.scheduleWithDelay(this.updateScore, this, 100);
+}
+
+/**
+ * Show game-over dialog
+ */
+rb.Game.prototype.endGame = function() {
+
+    this.removeEventListeners();
+
+    this.board.getCountDown().showTimeUp(); 
+
+
+    goog.events.listenOnce(this.eventTarget, 'time up', function(e){
+            
+            console.log('time up');
+
+            this.resetGame();
+
+            this.eventTarget.dispatchEvent('game over');
+
+        }, false, this);
+};
+
+
+/**
+ * Resets score and response time
+ */
+rb.Game.prototype.resetGame = function() {
+
+    this.points = 0;
+    this.responseTime = [0];
+
+    this.scoreText.setText('000');
+    this.timeText.setText(this.setLevelTime());
+
+    // Reset and pause animation
+    this.board.resetBoard();
+}
+
+/**
+ * Sets level time
+ */
+rb.Game.prototype.setLevelTime = function()
+{
+    this.currentTime = 30;
+
+    return this.currentTime;
 }
 
 /**
@@ -207,14 +245,16 @@ rb.Game.prototype.setScore = function(p) {
  */
 rb.Game.prototype.setResponseTime = function() {
     var dateNow = Date.now();
-    this.responseTime.push(dateNow - this.start);
+    this.responseTime.push((dateNow - this.start) / 1000);
     this.start = dateNow;
+
+    console.log("this.responseTime", this.responseTime[this.responseTime.length - 1]);
 };
 
 /**
- * Find average response time and update label
+ * Calculate average response time
  */
-rb.Game.prototype.updateResponseTime = function() {
+rb.Game.prototype.calculateAverageResponseTime = function() {
 
     var total = 0;
     var length = this.responseTime.length;
@@ -223,7 +263,9 @@ rb.Game.prototype.updateResponseTime = function() {
         total += this.responseTime[i];
     };
 
-    // this.responseTimeText.setText((total / length) / 1000);
+    total = total / length;
+
+    return total;
 };
 
 /**
@@ -261,24 +303,6 @@ rb.Game.prototype.removeEventListeners = function()
         goog.events.unlisten(this.board.nodeTargets[i],['mousedown','touchstart'], goog.partial(this.pressHandler, this));
     };
 }
-
-/**
- * Show game-over dialog
- */
-rb.Game.prototype.endGame = function() {
-
-    this.removeEventListeners();
-
-    this.board.endGame();
-
-    this.board.getCountDown().showTimeUp(); 
-
-    goog.events.listenOnce(this.board.getCountDown().getEventTarget(), 'time up', function(e){
-            
-            this.eventTarget.dispatchEvent('end');
-
-        }, false, this);
-};
 
 /**
  * Returns event target. Dispatches events

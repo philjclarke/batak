@@ -16,8 +16,12 @@ goog.require('lime.animation.Loop');
  * @constructor
  * @extends lime.Sprite
  */
-rb.TileCountDown = function() {
-    // goog.base(this);
+rb.TileCountDown = function(eventTarget) {
+
+    this.eventTarget = eventTarget;
+
+    console.log('this.eventTargeta', this.eventTarget);
+
     lime.Sprite.call(this);
 
     this.backgroundAnimation = new lime.Sprite().setAnchorPoint(0.5, 0.5).setPosition(0, 0).setSize(91,91);
@@ -73,7 +77,6 @@ rb.TileCountDown = function() {
     this.appendChild(this.lbl, this.getNumberOfChildren() - 1);
 
     this.animating = false;
-    this.eventTarget = new goog.events.EventTarget();
 
     this.counterIndex = null;
 
@@ -163,6 +166,8 @@ rb.TileCountDown.prototype.animate = function(sprite, time, type) {
             {
                 this.countDownIndex = 0;
 
+                console.log(type);
+
                 if(type == 'time up')
                 {
                     lime.scheduleManager.callAfter(function(){
@@ -178,7 +183,7 @@ rb.TileCountDown.prototype.animate = function(sprite, time, type) {
                 {
                     target.setHidden(true);
 
-                    target.eventTarget.dispatchEvent(type);
+                    target.eventTarget.dispatchEvent("countdown finished");
                 }  
             }
         })
@@ -213,7 +218,7 @@ rb.TileCountDown.prototype.updateCounter = function(s) {
     }    
     */
     
-    this.animate(animationImage, 0.5, 'end');
+    this.animate(animationImage, 0.5, 'countdown finished');
 
     this.countDownIndex = this.countDownIndex + 1;
 };

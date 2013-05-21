@@ -16,10 +16,13 @@ goog.require('rb.MultiMove');
  * @constructor
  * @extends lime.Sprite
  */
-rb.Board = function(game) {
+rb.Board = function(game, level, eventTarget) {
+
     lime.Sprite.call(this);
 
+    this.level = level;
     this.game = game;
+    this.eventTarget = eventTarget;
 
     /**
      * @const
@@ -72,7 +75,7 @@ rb.Board = function(game) {
     }
 
     // Add countdown timer
-    this.countDown = new rb.TileCountDown();
+    this.countDown = new rb.TileCountDown(eventTarget);
     this.countDown.setPosition(this.nodeTargets[5].getPosition());
     this.countDown.setSize(this.GAP / 2 , this.GAP / 2);
 
@@ -80,7 +83,6 @@ rb.Board = function(game) {
 
     this.gameBoard.appendChild(this.countDown, this.gameBoard.getNumberOfChildren() - 1);  
 
-    this.eventTarget = new goog.events.EventTarget();
 };
 
 goog.inherits(rb.Board, lime.Sprite);
@@ -101,12 +103,12 @@ rb.Board.prototype.createBoard = function() {
             {
                 index = index + 1;
 
-                var nodeTarget = new rb.TileButton.type("game");
+                var nodeTarget = new rb.TileButton.type("game", this.level.TILE_UP, this.level.TILE_DOWN, this.level.TILE_SELECT);
                 nodeTarget.setPosition((c + .5) * this.GAP, (r + .5) * this.GAP);
                 nodeTarget.setSize(this.GAP / 2 , this.GAP / 2);
-                this.gameBoard.appendChild(nodeTarget, this.gameBoard.getNumberOfChildren() - 1);    
+                this.gameBoard.appendChild(nodeTarget, this.gameBoard.getNumberOfChildren() - 1);
 
-                this.nodeTargets.push(nodeTarget); 
+                this.nodeTargets.push(nodeTarget);
 
                 nodeTarget.position = nodeTarget.getPosition();
             }
@@ -154,7 +156,7 @@ rb.Board.prototype.startCountDown = function() {
 
     this.countDown.startCountDown();
 
-    goog.events.listen(this.countDown.getEventTarget(), 'end', function(e){
+    goog.events.listen(this.eventTarget, 'countdown finished', function(e){
         
             this.nodeTargets[5].setHidden(false);
         }, false, this); 
@@ -162,14 +164,10 @@ rb.Board.prototype.startCountDown = function() {
 
 rb.Board.prototype.startGame = function() {
     
+    console.log('startGame');
+
     this.unpause();
     this.selectRandom();
-};
-
-rb.Board.prototype.endGame = function() {
-   
-    this.resetBoard();
-    this.pause();
 };
 
 rb.Board.prototype.getCountDown = function() {
@@ -179,6 +177,11 @@ rb.Board.prototype.getCountDown = function() {
 
 rb.Board.prototype.setRandomNumbers = function(randomArray1, targets1, randomArray2, targets2)
 {
+    console.log(randomArray1);
+    console.log(targets1);
+    console.log(randomArray2);
+    console.log(targets2);
+
     // Reset array
     this.nodeNumbers.length = 0;
 
@@ -225,10 +228,10 @@ rb.Board.prototype.setRandomNumbers = function(randomArray1, targets1, randomArr
     {   
         if(indexArray.indexOf(i) != -1)
         {
-            this.nodeTargets[i].select();
+            this.nodeTargets[i].select(false);
         } 
 
-        this.nodeTargets[i].setNumber(this.nodeNumbers[i]);
+        this.nodeTargets[i].setText(this.nodeNumbers[i]);
     };
 
     console.log(this.nodeNumbers);
@@ -244,7 +247,7 @@ rb.Board.prototype.selectRandom = function(e)
         this.nodeTargets[this.selectedNode].deselect();
 
         console.log(randomNumber);
-        this.nodeTargets[randomNumber].select();
+        this.nodeTargets[randomNumber].select(true);
 
         this.selectedNode = randomNumber;
 

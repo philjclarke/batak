@@ -5,7 +5,7 @@ goog.provide('rb.LevelIntro');
  * @constructor
  * @extends lime.Scene
  */
-rb.LevelIntro = function(level, intoText, highestScore) {
+rb.LevelIntro = function(level, intoText, levelImage, highestScore, eventTarget) {
     lime.Scene.call(this);
 
     var layer = new lime.Layer().setPosition(0, 0);
@@ -21,9 +21,7 @@ rb.LevelIntro = function(level, intoText, highestScore) {
     var headerBackground = new lime.Sprite().setFill('assets/header.png').setAnchorPoint(0, 0).setPosition(0, 0);
     layer.appendChild(headerBackground, 1);
 
-    var backgroundHeight = headerBackground.getSize().height;
-
-    var highestScoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0.5).setSize(100, 50).setPosition(600, backgroundHeight / 2);
+    var highestScoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0.5).setSize(100, 50).setPosition(600, rb.GAME.HEADER_HEIGHT / 2);
 
     if(rb.Mode.DEBUG)
     highestScoreBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -32,7 +30,7 @@ rb.LevelIntro = function(level, intoText, highestScore) {
 
     // Score
     var highestScore = new lime.Label().setText(highestScore).setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(48).
-        setAlign('center').setAnchorPoint(0, 0.5).setSize(100, 50).setPosition(600, backgroundHeight / 2);
+        setAlign('center').setAnchorPoint(0, 0.5).setSize(100, 50).setPosition(600, rb.GAME.HEADER_HEIGHT / 2);
     
     if(rb.Mode.DEBUG)
     highestScore.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -41,21 +39,21 @@ rb.LevelIntro = function(level, intoText, highestScore) {
 
     // Highest score heading
     var highestScoreText = new lime.Label().setText('highest score').setFontFamily(rb.GAME.FONT).setFontColor('#333333').setFontSize(36).
-        setAlign('right').setAnchorPoint(1, 0.5).setSize(250, 50).setPosition(600 - padding, backgroundHeight / 2);
+        setAlign('right').setAnchorPoint(1, 0.5).setSize(250, 50).setPosition(600 - padding, rb.GAME.HEADER_HEIGHT / 2);
 
     if(rb.Mode.DEBUG)
     highestScoreText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
            
     layer.appendChild(highestScoreText, 4);
 
-    var level1Image = new lime.Sprite().setFill('assets/level_1_diagram.png').setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, 350);
+    var level1Image = new lime.Sprite().setFill(levelImage).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, 350);
     layer.appendChild(level1Image, 1);
 
     // Level 1 heading
     var level1Heading = new lime.Label().setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(48).
         setAlign('right').setAnchorPoint(1, 0).setSize(160, 150).setPosition(rb.WIDTH * 0.3 - (padding / 2), 600);
 
-    level1Heading.setText(level);
+    level1Heading.setText('level ' + level);
 
     if(rb.Mode.DEBUG)
     level1Heading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -73,11 +71,13 @@ rb.LevelIntro = function(level, intoText, highestScore) {
 
     layer.appendChild(level1Text, 5);
 
-    this.playButton = new rb.TileButton.type("play").setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT * 0.85);
+    this.playButton = new rb.TileButton.type("play", eventTarget).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT * 0.85);
 
     layer.appendChild(this.playButton, 6);
     
     this.appendChild(layer);
+
+    console.log(eventTarget);
 };
 
 goog.inherits(rb.LevelIntro, lime.Scene);

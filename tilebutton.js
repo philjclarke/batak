@@ -10,6 +10,7 @@ goog.require('lime.animation.ScaleTo');
 goog.require('lime.animation.Sequence');
 goog.require('lime.animation.Spawn');
 
+
 /**
  * Start button constructor
  * @constructor
@@ -42,7 +43,6 @@ rb.TileButton = function() {
     this.appendChild(this.lbl, 3);
 
     this.animating = false;
-    this.eventTarget = new goog.events.EventTarget();
 
     this.selected = true;
     this.paused = false;
@@ -56,13 +56,14 @@ goog.inherits(rb.TileButton, lime.Sprite);
  * Creates button by type
  * @return {rb.Button} New button.
  */
-rb.TileButton.type = function(type) {
+rb.TileButton.type = function(type, eventTarget, tileUp, tileDown, tileSelect) {
 
     var button = new rb.TileButton();
 
     button.type = type;
+    button.eventTarget = eventTarget;
 
-    if(type == "start" || type == "play")
+    if(type == "start" || type == "play" || type == "continue")
     {
         button.backgroundAnimation.setFill('assets/start-play-animation.png');
 
@@ -79,7 +80,7 @@ rb.TileButton.type = function(type) {
         button.backgroundAnimation.setSize(181, 181);
         button.backgroundAnimation.setScale(1.5);
 
-        button.lbl.setSize(121, 45)
+        button.lbl.setSize(181, 45)
         button.lbl.setText(type);
 
         goog.events.listen(button.buttonImage, ['mousedown','touchstart'], button.animate, true, button);
@@ -108,16 +109,19 @@ rb.TileButton.type = function(type) {
     }         
     else if(type == "game")
     {
-        button.backgroundAnimation.setFill('assets/node-green-interaction-whole.png');
+        button.backgroundAnimation.setFill(tileDown);
 
         if(this.ios)
         button.backgroundAnimation.setRotation(45);
         else
         button.backgroundAnimation.setRotation(45);
 
+        // button.buttonImage.setSize(101, 101)
+        // button.backgroundAnimation.setSize(101, 101)
+
         button.backgroundAnimation.setScale(1.5);
         button.backgroundAnimation.setHidden(true);
-        button.buttonImage.setFill('assets/node-green.png');
+        button.buttonImage.setFill(tileUp);
 
         // Paused by default
         button.paused = true;
@@ -152,6 +156,8 @@ rb.TileButton.prototype.animate = function(e) {
 
     var target = this;
 
+    console.log('animate', target.animating, target.paused);
+
     if(target.animating == false && target.paused == false)
     {
         var animation;
@@ -179,8 +185,6 @@ rb.TileButton.prototype.animate = function(e) {
         }
         else
         {
-            
-
             if(target.ios)
             {
                 animation = new lime.animation.Spawn(
@@ -212,10 +216,7 @@ rb.TileButton.prototype.animate = function(e) {
 
             target.animating = false;
 
-            console.log("target.selected");
-            console.log(target.selected);
-
-            if(target.selected)
+            if(target.type != 'game')
             {    
                 target.eventTarget.dispatchEvent(target.lbl.getText());
             }
@@ -247,15 +248,18 @@ rb.TileButton.prototype.getEventTarget = function() {
 /**
  * Select target. Show highlight
  */
-rb.TileButton.prototype.select = function() {
+rb.TileButton.prototype.select = function(highlight) {
     if (this.selected) return;
 
     var size = this.getSize().clone();
 
     console.log(size);
 
-    this.highlight = new lime.Sprite().setFill('assets/node-green-on.png');
-    this.appendChild(this.highlight, 100);
+    if(highlight)
+    {
+        this.highlight = new lime.Sprite().setFill('assets/node-green-on.png');
+        this.appendChild(this.highlight, 100);       
+    }    
 
     this.selected = true;
 };
