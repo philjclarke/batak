@@ -7,10 +7,11 @@ goog.require('lime.Scene');
 goog.require('lime.transitions.Dissolve');
 goog.require('lime.transitions.SlideInRight');
 goog.require('rb.Board');
+goog.require('rb.GameEnd');
 goog.require('rb.TileButton');
 goog.require('rb.Level1');
 goog.require('rb.Level2');
-// goog.require('rb.Level3');
+goog.require('rb.Level3');
 goog.require('rb.LevelEnd');
 goog.require('rb.Help');
 goog.require('rb.LevelIntro');
@@ -28,17 +29,22 @@ rb.GameManager = function() {
     {   
         // this.showSplash();
 
-        // this.showStart();
+        this.showStartScreen();
 
-        // this.loadLevel('level 1');
+        // rb.GAME.currentLevel = 2;
+        // this.loadLevel();
 
         // this.loadGame();
 
-        this.showLevelEnd();
+        // this.showLevelEnd();
+
+        // this.showEndScreen();
     }
     else
     {
-        this.showSplash();
+        this.showStartScreen();    
+
+        // this.showEndScreen();  
     }       
 };
 
@@ -46,7 +52,6 @@ rb.GameManager = function() {
  * Shows scientists in sport splash screen
  */
 rb.GameManager.prototype.showSplash = function() {
-
     var scene = new lime.Scene(),
         layer = new lime.Layer().setPosition(0, 0);
     
@@ -72,7 +77,6 @@ rb.GameManager.prototype.showSplash = function() {
  * Shows gsk splash screen
  */
 rb.GameManager.prototype.showSplash1 = function() {
-
     var scene = new lime.Scene(),
         layer = new lime.Layer().setPosition(0, 0);
     
@@ -92,7 +96,7 @@ rb.GameManager.prototype.showSplash1 = function() {
 
     lime.scheduleManager.callAfter(function(){
         
-        this.showStart()
+        this.showStartScreen()
 
      }, this, 2000);
 }
@@ -100,8 +104,7 @@ rb.GameManager.prototype.showSplash1 = function() {
 /**
  * Shows start screen
  */
-rb.GameManager.prototype.showStart = function() {
-
+rb.GameManager.prototype.showStartScreen = function() {
     var startScene = new lime.Scene(),
         layer = new lime.Layer().setPosition(0, 0); 
 
@@ -125,11 +128,9 @@ rb.GameManager.prototype.showStart = function() {
         setAlign('left').setAnchorPoint(0, 0).setSize(650, 250).setPosition(30, 565);
     layer.appendChild(introText);
 
-    var startButton = new rb.TileButton.type("start", this.eventTarget).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT * 0.85);
+    var startButton = new rb.TileButton.type("start", this.eventTarget, rb.NAV.START_CONTINUE_UP, rb.NAV.START_CONTINUE_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT * 0.85);
 
     layer.appendChild(startButton);
-
-    console.log(startButton.getSize());
 
     startScene.appendChild(layer);
 
@@ -145,10 +146,25 @@ rb.GameManager.prototype.showStart = function() {
 }
 
 /**
+ * Shows end screen
+ */
+rb.GameManager.prototype.showEndScreen = function() {
+    var endScreen = new rb.GameEnd(rb.Level1, rb.Level2, rb.Level3);
+
+    if(rb.Mode.DEBUG)
+    rb.director.replaceScene(endScreen);
+    else
+    rb.director.replaceScene(endScreen, lime.transitions.SlideInRight);
+
+    goog.events.listenOnce(this.eventTarget, 'play again', function(e){
+      console.log('play again')
+    }, false, this);
+}
+
+/**
  * Loads level
  */
 rb.GameManager.prototype.loadLevel = function() {
-
     var level;
 
     switch(rb.GAME.currentLevel)
@@ -171,9 +187,9 @@ rb.GameManager.prototype.loadLevel = function() {
     else
     rb.director.replaceScene(levelIntro, lime.transitions.SlideInRight);
 
-    goog.events.listen(this.eventTarget, 'play', function(e){
+    goog.events.listenOnce(this.eventTarget, 'play', function(e){
     
-      this.loadGame(1);
+      this.loadGame(level);
     }, false, this);
 }
 
@@ -181,6 +197,7 @@ rb.GameManager.prototype.loadLevel = function() {
  * Loads game
  */
 rb.GameManager.prototype.loadGame = function() {
+    var scene;
 
     switch(rb.GAME.currentLevel)
     {
@@ -191,10 +208,11 @@ rb.GameManager.prototype.loadGame = function() {
             scene = new rb.Level2(this.eventTarget);
         break;
         case 3:
-            scene = new rb.Level1(this.eventTarget);
-            // scene = new rb.Level3(this.eventTarget);
+            scene = new rb.Level3(this.eventTarget);
         break;              
     }
+
+    console.log(rb.GAME.currentLevel);
 
     scene.setPosition(0, 0);
 
@@ -215,7 +233,6 @@ rb.GameManager.prototype.loadGame = function() {
  * Shows end of level screen
  */
 rb.GameManager.prototype.showLevelEnd = function() {
-
     var level;
 
     switch(rb.GAME.currentLevel)
@@ -232,25 +249,30 @@ rb.GameManager.prototype.showLevelEnd = function() {
     }
 
     // Pass in level TEMP
-    var levelEnd = new rb.LevelEnd(1, level.score, level.bestScore, level.art, level.bestART, this.eventTarget);
+    var levelEnd = new rb.LevelEnd(rb.GAME.currentLevel, level, this.eventTarget);
 
     if(rb.Mode.DEBUG)
     rb.director.replaceScene(levelEnd);
     else
     rb.director.replaceScene(levelEnd, lime.transitions.SlideInRight);
 
-    goog.events.listenOnce(this.eventTarget, 'restart level', function(e) {
-    
-        this.loadGame();
-    }, false, this);
+    if(goog.events.hasListener(this.eventTarget, 'restart level') == false)
+    {
+        goog.events.listenOnce(this.eventTarget, 'restart level', function(e) {
+            this.loadGame();
+        }, false, this);
+    }
 
-    goog.events.listenOnce(this.eventTarget, 'continue', function(e) {
-       
-        if(rb.GAME.currentLevel < rb.GAME.LEVELS)        
-        rb.GAME.currentLevel = rb.GAME.currentLevel + 1;
+    if(goog.events.hasListener(this.eventTarget, 'continue') == false)
+    {
+        goog.events.listenOnce(this.eventTarget, 'continue', function(e) {
+           
+            if(rb.GAME.currentLevel < rb.GAME.LEVELS)        
+            rb.GAME.currentLevel = rb.GAME.currentLevel + 1;
 
-        this.loadLevel(rb.GAME.currentLevel);
-    }, false, this);
+            this.loadLevel(rb.GAME.currentLevel);
+        }, false, this);
+    }
 }
 
 /*

@@ -71,13 +71,11 @@ rb.LevelIntro = function(level, intoText, levelImage, highestScore, eventTarget)
 
     layer.appendChild(level1Text, 5);
 
-    this.playButton = new rb.TileButton.type("play", eventTarget).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT * 0.85);
+    this.playButton = new rb.TileButton.type("play", eventTarget, rb.NAV.START_CONTINUE_UP, rb.NAV.START_CONTINUE_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT * 0.85);
 
     layer.appendChild(this.playButton, 6);
     
     this.appendChild(layer);
-
-    console.log(eventTarget);
 };
 
 goog.inherits(rb.LevelIntro, lime.Scene);

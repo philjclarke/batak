@@ -14,7 +14,6 @@ goog.require('rb.Button');
 rb.Help = function() {
     lime.Scene.call(this); // Define scope of scene
 
-
     var btn = new rb.Button('Back').setPosition(360, 870).setSize(300, 90);
     goog.events.listen(btn, 'click', function() {rb.loadMenu()});
     this.appendChild(btn);

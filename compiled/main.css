@@ -1,13 +1,17 @@
 body {
-	background: #272628;
+	font-family:'FrutigerNeue1450W01-Reg', arial, sans-serif;
 
-	/*
-	font-family:'FrutigerNeue1450W01-Bol 1196308', arial, sans-serif;
+	/* background: #272628; */
 
-	font-family: 'FrutigerNeue1450W01-Bol 1196308', sans-serif;
-	font-weight: 700;
+	background: #1e1e1e;
 
-	/* 300, 400, 600, 700 */
-	/* font-size: 100%; */
-	color: #ffffff;	
+/*
+font-family:'FrutigerNeue1450W01-Bol 1196308';
+font-family:'FrutigerNeue1450W01-Med';
+font-family:'FrutigerNeue1450W01-Reg';
+font-family:'FrutigerLTW01-55Roman';
+font-family:'Frutiger LT W01 65 Bold';
+*/
+
+	color: #ffffff;
 }

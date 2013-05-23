@@ -1,79 +1,149 @@
 goog.provide('rb.Level3');
-
 goog.require('rb.Game');
-
-goog.require('rb.Variables');
+goog.require('rb.Board');
 
 /**
  * Level3 scene.
  * @constructor
  * @extends lime.Scene
  */
-rb.Level3 = function() {
-    rb.Game.call(this);
+rb.Level3 = function(eventTarget) {
+    // Call everything in this scope
+    rb.Game.call(this, rb.LEVEL3, eventTarget);
 
-    var layer = new lime.Layer();
-    this.appendChild(layer);    
+    this.currentTime = rb.LEVEL3.TIME;
 
-    var instructions_lbl = new lime.Label().setFontFamily('HelveticaNeueW01-45Ligh').setFontColor('#ffffff').setFontSize(24).
-    setPosition(150, 200).setText('Test').setSize(425, 100).setAnchorPoint(0, 0).setStroke(new lime.fill.Stroke(1, '#ffffff'));
-    layer.appendChild(instructions_lbl);
+    this.listenKeys = [];
 
-    this.targetNumbers = this.generateNumbers(0, 0, 50);
+    this.instructionsBackground = new lime.Sprite().setFill('#3a3b3c').setAnchorPoint(0.5, 0).setPosition(rb.WIDTH / 2, 175).setSize(250, 60);
 
-    this.tile = null;
+    if(rb.Mode.DEBUG)
+    this.instructionsBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+    
+    this.instructionsBackground.setHidden(true);
+    this.appendChild(this.instructionsBackground, 3);
 
-    this.reset();
+    this.instructionsText = new lime.Label().setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(60).
+    setAnchorPoint(0.5, 0).setPosition(rb.WIDTH / 2, 175).setSize(250, 60);
+
+    if(rb.Mode.DEBUG)
+    this.instructionsText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+    
+    this.instructionsText.setHidden(true);
+    this.appendChild(this.instructionsText);
+
+    this.numbers = this.generateNumbers(0, 0, 50);  
+
+    this.generateQuestion();
 };
 
 goog.inherits(rb.Level3, rb.Game);
 
+rb.Level3.prototype.startGame = function()
+{
+    this.board.startCountDown();
+
+    goog.events.listenOnce(this.eventTarget, 'countdown finished', function(e){
+
+            this.start = Date.now();
+
+            this.setResponseTime();
+
+            this.board.startGame();
+            
+            this.addEventListeners();
+
+            this.instructionsText.setHidden(false);
+            this.instructionsBackground.setHidden(false);
+
+        }, false, this);
+
+    // Update scores
+    goog.events.listenOnce(this.eventTarget, 'time up', function(e){
+            
+            this.updateLevelScores(rb.LEVEL3)
+
+        }, false, this);    
+}
+
+rb.Level3.prototype.updateLevelScores = function(level)
+{
+    level.score = this.points;
+    level.art = this.calculateAverageResponseTime();
+
+    if(parseInt(this.points) > parseInt(level.bestScore))
+    level.bestScore = this.points;
+
+    if(level.bestART == null)
+    level.bestART = level.art;
+    else if(parseInt(level.art) < parseInt(level.bestART))
+    level.bestART = level.art;
+}
+
 rb.Level3.prototype.addEventListeners = function()
 {
+    lime.scheduleManager.scheduleWithDelay(this.decreaseTime, this, 1000);
+
+    lime.scheduleManager.scheduleWithDelay(this.updateResponseTime, this, 100);
+
+    lime.scheduleManager.scheduleWithDelay(this.updateScore, this, 100);
+       
     for (var i = 0; i < this.board.nodeTargets.length; i++)
     {    
-        goog.events.listen(this.board.nodeTargets[i],['mousedown','touchstart'], goog.partial(this.pressHandler, this));
+        this.listenKeys.push(goog.events.listen(this.board.nodeTargets[i],'mousedown', goog.partial(this.pressHandler, this)))
+        this.listenKeys.push(goog.events.listen(this.board.nodeTargets[i],'touchstart', goog.partial(this.pressHandler, this)))
     };
 }
 
 rb.Level3.prototype.removeEventListeners = function()
 {
-    for (var i = 0; i < this.board.nodeTargets.length; i++)
+    lime.scheduleManager.unschedule(this.decreaseTime, this);
+
+    lime.scheduleManager.unschedule(this.updateScore, this);
+
+    for (var i = 0; i < this.listenKeys.length; i++)
     {    
-        goog.events.unlisten(this.board.nodeTargets[i],['mousedown','touchstart'], goog.partial(this.pressHandler, this));
+        goog.events.unlistenByKey(this.listenKeys[i]);
     };
+
+    this.listenKeys.length = 0;
 }
 
 rb.Level3.prototype.pressHandler = function(level, e)
 {
-    if(this.selected_)
+    if(this.selected)
     {
         level.setScore(1);
         level.setResponseTime();
 
-        level.board.reset();
-
-
-        // level.board.setRandomNumbers(level.oddNumbers, level.TARGETS, level.evenNumbers, 1);
-    }    
-    else
-    {
-        //negative feedback
-    }    
+        level.board.resetBoard();
+        level.board.flashBoard();
+        level.generateQuestion();
+    }   
 }
 
-rb.Level3.prototype.reset = function()
+rb.Level3.prototype.setLevelTime = function()
+{
+    this.currentTime = rb.LEVEL3.TIME;
+
+    return this.currentTime;
+}
+
+rb.Level3.prototype.generateQuestion = function()
 {
     var randomNumber = Math.floor(Math.random() * rb.LEVEL3.OPERATORS.length);
     var operator = rb.LEVEL3.OPERATORS[randomNumber];
 
-    this.board.setRandomNumbers(this.targetNumbers, rb.LEVEL3.TILES);
+    this.board.setRandomNumbers(this.numbers, rb.LEVEL3.TILES);
 
-    this.tile = this.board.selectRandom();
-    var tileNum = parseInt(this.tile.getNumber());
+    this.tile = this.board.selectRandomNode(false);
+
+    console.log('this.tile', this.tile);
+
+    var tileNum = parseInt(this.tile.getText());
     var b = null;
 
-    console.log(this.tile.getNumber());
+    console.log(this.tile.getText());
 
     var question = null;
     var factorsArray = null;
@@ -87,9 +157,9 @@ rb.Level3.prototype.reset = function()
 
         console.log("/", factorsArray[randomNumber]);
 
-        b = this.tile.getNumber() / factorsArray[randomNumber];
+        b = this.tile.getText() / factorsArray[randomNumber];
 
-        question = factorsArray[randomNumber] + "*" + b;
+        question = factorsArray[randomNumber] + " x " + b;
 
         console.log("x", question, "answer", tileNum);
     }  
@@ -98,7 +168,7 @@ rb.Level3.prototype.reset = function()
         randomNumber = Math.floor(Math.random() * tileNum) + 1;
         b = tileNum - randomNumber;
 
-        question = b + "+" + randomNumber;
+        question = b + " + " + randomNumber;
 
         console.log("+", question, "answer", tileNum);
     }
@@ -108,18 +178,10 @@ rb.Level3.prototype.reset = function()
 
         b = tileNum + randomNumber;
 
-        question = b + "-" + randomNumber;
+        question = b + " - " + randomNumber;
 
         console.log("-", question, "answer", tileNum);
     }
 
-
-    /*
-    console.log(this.targetNumbers);
-
-    console.log(this.findFactors(50));
-
-    // Set board
-    this.board.setRandomNumbers(this.targetNumbers, 12); 
-    */
+    this.instructionsText.setText(question);
 }

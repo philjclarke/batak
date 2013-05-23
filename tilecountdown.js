@@ -16,11 +16,9 @@ goog.require('lime.animation.Loop');
  * @constructor
  * @extends lime.Sprite
  */
-rb.TileCountDown = function(eventTarget) {
+rb.TileCountDown = function(level, eventTarget) {
 
     this.eventTarget = eventTarget;
-
-    console.log('this.eventTargeta', this.eventTarget);
 
     lime.Sprite.call(this);
 
@@ -40,31 +38,15 @@ rb.TileCountDown = function(eventTarget) {
 
     this.buttonImages = new Array();
 
-    this.buttonBlue = new lime.Sprite().setSize(151,151);
-    this.buttonBlue.setFill('assets/countdown-blue.png');
+    this.buttonImage = new lime.Sprite().setSize(151,151);
+    this.buttonImage.setFill(level.TILE_COUNTDOWN_UP);
 
-    this.buttonOrange = new lime.Sprite().setSize(151,151);
-    this.buttonOrange.setFill('assets/countdown-orange.png');
+    this.buttonAnimationImage = new lime.Sprite().setSize(151,151);
+    this.buttonAnimationImage.setFill(level.TILE_COUNTDOWN_DOWN);
 
-    this.buttonGreen = new lime.Sprite().setSize(151,151);
-    this.buttonGreen.setFill('assets/countdown-green-large.png');
+    this.appendChild(this.buttonAnimationImage, this.getNumberOfChildren() - 1);
 
-    this.buttonAnimationBlue = new lime.Sprite().setSize(151,151);
-    this.buttonAnimationBlue.setFill('assets/node-blue-interaction-whole.png');
-
-    this.buttonAnimationOrange = new lime.Sprite().setSize(151,151);
-    this.buttonAnimationOrange.setFill('assets/node-orange-interaction-whole.png');
-
-    this.buttonAnimationGreen = new lime.Sprite().setSize(151,151);
-    this.buttonAnimationGreen.setFill('assets/node-green-interaction-whole.png')
-
-    this.appendChild(this.buttonAnimationBlue, this.getNumberOfChildren() - 1);
-    this.appendChild(this.buttonAnimationOrange, this.getNumberOfChildren() - 1);
-    this.appendChild(this.buttonAnimationGreen, this.getNumberOfChildren() - 1);
-
-    this.appendChild(this.buttonBlue, this.getNumberOfChildren() - 1);
-    this.appendChild(this.buttonOrange, this.getNumberOfChildren() - 1);
-    this.appendChild(this.buttonGreen, this.getNumberOfChildren() - 1);
+    this.appendChild(this.buttonImage, this.getNumberOfChildren() - 1);
 
     this.lbl = new lime.Label().setText('').setFontFamily(rb.GAME.FONT).setFontColor('#1e1e1e').setFontWeight(500).setFontSize(48).
         setAlign('center');
@@ -84,20 +66,9 @@ rb.TileCountDown = function(eventTarget) {
 
     this.countDownIndex = 0;
     this.countDownArray = ["3", "2", "1", "GO"];
-    // this.backgroundImageArray = [this.buttonBlue, this.buttonOrange, this.buttonGreen, this.buttonGreen];
-    // this.animationImageArray = [this.buttonAnimationBlue, this.buttonAnimationOrange, this.buttonAnimationGreen, this.buttonAnimationGreen];
 
-    this.backgroundImageArray = [this.buttonGreen, this.buttonGreen, this.buttonGreen, this.buttonGreen];
-    this.animationImageArray = [this.buttonAnimationGreen, this.buttonAnimationGreen, this.buttonAnimationGreen, this.buttonAnimationGreen];
-
-    this.buttonBlue.setHidden(true);
-    this.buttonOrange.setHidden(true);
-    this.buttonGreen.setHidden(false);
-
-    
-    this.buttonAnimationBlue.setHidden(true);
-    this.buttonAnimationOrange.setHidden(true);
-    this.buttonAnimationGreen.setHidden(false);
+    this.buttonImage.setHidden(false);
+    this.buttonAnimationImage.setHidden(false);
 };
 
 goog.inherits(rb.TileCountDown, lime.Sprite);
@@ -118,12 +89,12 @@ rb.TileCountDown.prototype.showTimeUp = function(e) {
     this.lbl.setText('time');
 
     this.setHidden(false);
-    this.buttonGreen.setHidden(false);
+    this.buttonImage.setHidden(false);
 
-    this.buttonAnimationGreen.setScale(1.5);
-    this.buttonAnimationGreen.setHidden(false);
+    this.buttonAnimationImage.setScale(1.5);
+    this.buttonAnimationImage.setHidden(false);
 
-    this.animate(this.buttonAnimationGreen, 1, 'time up');
+    this.animate(this.buttonAnimationImage, 1, 'time up');
     this.lbl.setSize(100, 60);
     // this.lbl.setFontSize(36);
     // this.lbl.setPosition(3, -5);
@@ -165,9 +136,7 @@ rb.TileCountDown.prototype.animate = function(sprite, time, type) {
             if(target.countDownIndex > 3)   
             {
                 this.countDownIndex = 0;
-
-                console.log(type);
-
+                
                 if(type == 'time up')
                 {
                     lime.scheduleManager.callAfter(function(){
@@ -179,7 +148,7 @@ rb.TileCountDown.prototype.animate = function(sprite, time, type) {
 
                      }, this, 1000);
                 } 
-                else
+                else if(type == 'countdown finished')
                 {
                     target.setHidden(true);
 
@@ -197,28 +166,15 @@ rb.TileCountDown.prototype.updateCounter = function(s) {
 
     this.lbl.setText(this.countDownArray[this.countDownIndex]);
     
-    // var buttonImage = this.backgroundImageArray[this.countDownIndex].setHidden(false);
-    // var animationImage = this.animationImageArray[this.countDownIndex].setHidden(false);
+    this.buttonAnimationImage.setHidden(false);
+    this.buttonAnimationImage.setScale(1.5);
 
-    var buttonImage = this.backgroundImageArray[this.countDownIndex];
-    var animationImage = this.animationImageArray[this.countDownIndex];
-
-    animationImage.setHidden(false);
-    animationImage.setScale(1.5);
-
-    this.setChildIndex(animationImage, this.getNumberOfChildren() - 1);
-    this.setChildIndex(buttonImage, this.getNumberOfChildren() - 1);
+    this.setChildIndex(this.buttonAnimationImage, this.getNumberOfChildren() - 1);
+    this.setChildIndex(this.buttonImage, this.getNumberOfChildren() - 1);
 
     this.setChildIndex(this.lbl, this.getNumberOfChildren() - 1);
 
-    /*
-    if(this.countDownIndex != 0 && this.countDownIndex != 3)
-    {
-        // this.backgroundImageArray[this.countDownIndex - 1].setHidden(true);
-    }    
-    */
-    
-    this.animate(animationImage, 0.5, 'countdown finished');
+    this.animate(this.buttonAnimationImage, 0.5, 'countdown finished');
 
     this.countDownIndex = this.countDownIndex + 1;
 };

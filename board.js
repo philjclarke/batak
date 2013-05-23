@@ -75,7 +75,7 @@ rb.Board = function(game, level, eventTarget) {
     }
 
     // Add countdown timer
-    this.countDown = new rb.TileCountDown(eventTarget);
+    this.countDown = new rb.TileCountDown(this.level, eventTarget);
     this.countDown.setPosition(this.nodeTargets[5].getPosition());
     this.countDown.setSize(this.GAP / 2 , this.GAP / 2);
 
@@ -103,7 +103,7 @@ rb.Board.prototype.createBoard = function() {
             {
                 index = index + 1;
 
-                var nodeTarget = new rb.TileButton.type("game", this.level.TILE_UP, this.level.TILE_DOWN, this.level.TILE_SELECT);
+                var nodeTarget = new rb.TileButton.type("game", this.eventTarget, this.level.TILE_UP, this.level.TILE_DOWN, this.level.TILE_SELECT, this.level.TILE_INCORRECT, this.level.TEXT_COLOR);
                 nodeTarget.setPosition((c + .5) * this.GAP, (r + .5) * this.GAP);
                 nodeTarget.setSize(this.GAP / 2 , this.GAP / 2);
                 this.gameBoard.appendChild(nodeTarget, this.gameBoard.getNumberOfChildren() - 1);
@@ -137,7 +137,7 @@ rb.Board.prototype.drawLines = function(node1, node2)
 
     var angle = goog.math.angle(node1.position.x, node1.position.y, node2.position.x, node2.position.y);
 
-    var line = new lime.Sprite().setSize(distance, 2).setFill('#adc261').setPosition(node1.position).setAnchorPoint(1, 1);
+    var line = new lime.Sprite().setSize(distance, 2).setFill(this.level.LINE_COLOR).setPosition(node1.position).setAnchorPoint(1, 1);
 
     line.setRotation(angle);
 
@@ -164,10 +164,7 @@ rb.Board.prototype.startCountDown = function() {
 
 rb.Board.prototype.startGame = function() {
     
-    console.log('startGame');
-
     this.unpause();
-    this.selectRandom();
 };
 
 rb.Board.prototype.getCountDown = function() {
@@ -177,11 +174,6 @@ rb.Board.prototype.getCountDown = function() {
 
 rb.Board.prototype.setRandomNumbers = function(randomArray1, targets1, randomArray2, targets2)
 {
-    console.log(randomArray1);
-    console.log(targets1);
-    console.log(randomArray2);
-    console.log(targets2);
-
     // Reset array
     this.nodeNumbers.length = 0;
 
@@ -233,11 +225,9 @@ rb.Board.prototype.setRandomNumbers = function(randomArray1, targets1, randomArr
 
         this.nodeTargets[i].setText(this.nodeNumbers[i]);
     };
-
-    console.log(this.nodeNumbers);
 }
 
-rb.Board.prototype.selectRandom = function(e)
+rb.Board.prototype.selectRandomNode = function(visible)
 {
     var randomNumber = Math.floor(Math.random() * 12);
 
@@ -246,18 +236,15 @@ rb.Board.prototype.selectRandom = function(e)
         if(this.selectedNode != null)
         this.nodeTargets[this.selectedNode].deselect();
 
-        console.log(randomNumber);
-        this.nodeTargets[randomNumber].select(true);
+        this.nodeTargets[randomNumber].select(visible);
 
         this.selectedNode = randomNumber;
-
-        
 
         return this.nodeTargets[randomNumber];
     }
     else
     {
-        this.selectRandom();
+        this.selectRandomNode(visible);
     } 
 }
 
@@ -266,6 +253,14 @@ rb.Board.prototype.resetBoard = function(e)
     for (var i = 0; i < this.TARGETS; i++)
     {   
         this.nodeTargets[i].deselect();
+    };
+}
+
+rb.Board.prototype.flashBoard = function(e)
+{
+    for (var i = 0; i < this.TARGETS; i++)
+    {   
+        this.nodeTargets[i].flash();
     };
 }
 

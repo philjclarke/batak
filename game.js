@@ -12,8 +12,10 @@ goog.require('rb.Progress');
 rb.Game = function(level, eventTarget) {
     lime.Scene.call(this);
 
-    this.level = level;
+    this.level = level
+
     this.currentTime = this.level.TIME;
+
     this.points = 0;
     this.responseTime = [0];
     this.eventTarget = eventTarget;
@@ -39,15 +41,11 @@ rb.Game = function(level, eventTarget) {
     // Header background
     var headerBackground = new lime.Sprite().setFill('assets/header.png').setAnchorPoint(0, 0).setPosition(0, 0);
     layer.appendChild(headerBackground, 1);
-    
-    console.log('et', eventTarget);
 
     //make board
-    this.board = new rb.Board(this, this.level, eventTarget).setPosition(25, 174);
+    this.board = new rb.Board(this, this.level, eventTarget).setAnchorPoint(0.5, 0).setPosition(15, 174);
     
     if(rb.isBrokenChrome()) this.board.setRenderer(lime.Renderer.CANVAS);
-
-    this.start = Date.now();
 
     var timeBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0.5).setSize(80, 50).setPosition(600, rb.GAME.HEADER_HEIGHT / 2);
 
@@ -60,6 +58,15 @@ rb.Game = function(level, eventTarget) {
     this.timeText = new lime.Label().setText('00').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(48).
         setAlign('center').setAnchorPoint(0, 0.5).setSize(80, 50).setPosition(600, rb.GAME.HEADER_HEIGHT / 2);
     
+    if(this.currentTime < 10)
+    {
+        this.timeText.setText('0' + this.currentTime);
+    }    
+    else
+    {
+        this.timeText.setText(this.currentTime);
+    } 
+
     if(rb.Mode.DEBUG)
     this.timeText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
@@ -107,29 +114,20 @@ goog.inherits(rb.Game, lime.Scene);
 
 
 /**
- * 
- */
-rb.Game.prototype.startGame = function() {
-
-    lime.scheduleManager.scheduleWithDelay(this.decreaseTime, this, 1000);
-
-    lime.scheduleManager.scheduleWithDelay(this.updateScore, this, 100);
-}
-
-/**
  * Show game-over dialog
  */
 rb.Game.prototype.endGame = function() {
 
     this.removeEventListeners();
 
-    this.board.getCountDown().showTimeUp(); 
+    this.board.pause();
 
+    this.setResponseTime();
+
+    this.board.getCountDown().showTimeUp(); 
 
     goog.events.listenOnce(this.eventTarget, 'time up', function(e){
             
-            console.log('time up');
-
             this.resetGame();
 
             this.eventTarget.dispatchEvent('game over');
@@ -147,21 +145,12 @@ rb.Game.prototype.resetGame = function() {
     this.responseTime = [0];
 
     this.scoreText.setText('000');
-    this.timeText.setText(this.setLevelTime());
+    this.timeText.setText(this.level.TIME);
 
     // Reset and pause animation
     this.board.resetBoard();
 }
 
-/**
- * Sets level time
- */
-rb.Game.prototype.setLevelTime = function()
-{
-    this.currentTime = 30;
-
-    return this.currentTime;
-}
 
 /**
  * Finds all factors of a given number
@@ -181,7 +170,6 @@ rb.Game.prototype.findFactors = function(value) {
         
         if (value % i == 0)
         {
-            console.log("a", i)
             numbersArray.push(i);
         }
     };
@@ -247,8 +235,6 @@ rb.Game.prototype.setResponseTime = function() {
     var dateNow = Date.now();
     this.responseTime.push((dateNow - this.start) / 1000);
     this.start = dateNow;
-
-    console.log("this.responseTime", this.responseTime[this.responseTime.length - 1]);
 };
 
 /**
@@ -272,10 +258,9 @@ rb.Game.prototype.calculateAverageResponseTime = function() {
  * Subtract one second from left time in timed mode
  */
 rb.Game.prototype.decreaseTime = function() {
+
     this.currentTime--;
 
-    console.log()
-    
     if(this.currentTime < 10)
     {
         this.timeText.setText('0' + this.currentTime);
@@ -289,20 +274,6 @@ rb.Game.prototype.decreaseTime = function() {
         this.endGame();
     }
 };
-
-rb.Game.prototype.removeEventListeners = function()
-{
-    lime.scheduleManager.unschedule(this.decreaseTime, this);
-
-    lime.scheduleManager.unschedule(this.updateResponseTime, this);
-
-    lime.scheduleManager.unschedule(this.updateScore, this);
-
-    for (var i = 0; i < this.board.nodeTargets.length; i++)
-    {    
-        goog.events.unlisten(this.board.nodeTargets[i],['mousedown','touchstart'], goog.partial(this.pressHandler, this));
-    };
-}
 
 /**
  * Returns event target. Dispatches events

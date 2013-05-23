@@ -10,7 +10,6 @@ goog.require('lime.animation.ScaleTo');
 goog.require('lime.animation.Sequence');
 goog.require('lime.animation.Spawn');
 
-
 /**
  * Start button constructor
  * @constructor
@@ -21,16 +20,18 @@ rb.TileButton = function() {
     lime.Sprite.call(this);
 
     this.backgroundAnimation = new lime.Sprite().setAnchorPoint(0.5, 0.5).setPosition(0, 0);
+    this.backgroundAnimationIncorrect = new lime.Sprite().setAnchorPoint(0.5, 0.5).setPosition(0, 0);
 
     if(rb.Mode.DEBUG)
     this.backgroundAnimation.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
-    this.appendChild(this.backgroundAnimation, 1);
+    this.appendChild(this.backgroundAnimationIncorrect, 1);
+    this.appendChild(this.backgroundAnimation, 2);
 
     this.getSize().clone();
 
     this.buttonImage = new lime.Sprite();
-    this.appendChild(this.buttonImage, 2);
+    this.appendChild(this.buttonImage, 3);
 
     this.qualityRenderer = true;
 
@@ -56,81 +57,71 @@ goog.inherits(rb.TileButton, lime.Sprite);
  * Creates button by type
  * @return {rb.Button} New button.
  */
-rb.TileButton.type = function(type, eventTarget, tileUp, tileDown, tileSelect) {
+rb.TileButton.type = function(type, eventTarget, tileUp, tileDown, tileSelect, tileIncorrect, textColor) {
 
     var button = new rb.TileButton();
+
+    button.tileUp = tileUp
+    button.tileDown = tileDown
 
     button.type = type;
     button.eventTarget = eventTarget;
 
-    if(type == "start" || type == "play" || type == "continue")
+    button.backgroundAnimation.setHidden(true);
+    button.backgroundAnimation.setFill(button.tileDown);
+
+    button.buttonImage.setFill(button.tileUp);
+
+    if(type == "game")
     {
-        button.backgroundAnimation.setFill('assets/start-play-animation.png');
-
-        if(this.ios)
-        button.backgroundAnimation.setRotation(45);
-        else
-        button.backgroundAnimation.setRotation(45);
-
-        
-        button.backgroundAnimation.setHidden(true);
-        button.buttonImage.setFill('assets/start-play-button.png');
-
-        button.buttonImage.setSize(171, 171);
-        button.backgroundAnimation.setSize(181, 181);
+        button.tileSelect = tileSelect
+        button.tileIncorrect = tileIncorrect
+           
         button.backgroundAnimation.setScale(1.5);
 
-        button.lbl.setSize(181, 45)
-        button.lbl.setText(type);
-
-        goog.events.listen(button.buttonImage, ['mousedown','touchstart'], button.animate, true, button);
-    } 
-    if(type == "restart level")
-    {
-        button.backgroundAnimation.setFill('assets/restart-grey-animation.png');
-
-        if(this.ios)
-        button.backgroundAnimation.setRotation(45);
-        else
-        button.backgroundAnimation.setRotation(45);
-
-        button.buttonImage.setSize(171, 171);
-        button.backgroundAnimation.setSize(181, 181);
-        button.backgroundAnimation.setScale(1.5);
-
-        button.backgroundAnimation.setHidden(true);
-
-        button.buttonImage.setFill('assets/restart-button-grey.png');
-
-        button.lbl.setSize(151, 65)
-        button.lbl.setText(type);
-
-        goog.events.listen(button.buttonImage, ['mousedown','touchstart'], button.animate, true, button);
-    }         
-    else if(type == "game")
-    {
-        button.backgroundAnimation.setFill(tileDown);
-
-        if(this.ios)
-        button.backgroundAnimation.setRotation(45);
-        else
-        button.backgroundAnimation.setRotation(45);
-
-        // button.buttonImage.setSize(101, 101)
-        // button.backgroundAnimation.setSize(101, 101)
-
-        button.backgroundAnimation.setScale(1.5);
-        button.backgroundAnimation.setHidden(true);
-        button.buttonImage.setFill(tileUp);
+        button.backgroundAnimationIncorrect.setHidden(true);
+        button.backgroundAnimationIncorrect.setFill(button.tileIncorrect);
+        button.backgroundAnimationIncorrect.setScale(1.5);
 
         // Paused by default
         button.paused = true;
         button.selected = false;
 
-        button.lbl.setSize(91, 40)
+        button.lbl.setHidden(true);
+
+        if(textColor != undefined)
+        button.lbl.setFontColor(textColor);
+
+        if(textColor != undefined)
+        button.lbl.setFontFamily(rb.GAME.FONT_NUMBERS);
+
+        button.lbl.setSize(91, 40);
+
+        button.circle = new lime.Circle().setSize(91,91).setFill('#FFFFFF');
+        button.circle.setHidden(true);
+        button.appendChild(button.circle, 4);
 
         goog.events.listen(button, ['mousedown','touchstart'], button.animate, true, button);
     }    
+    else
+    {
+        button.buttonImage.setSize(171, 171);
+        button.backgroundAnimation.setSize(181, 181);
+        button.backgroundAnimation.setScale(1.5);
+
+        if(type == "restart level")
+        {
+            button.lbl.setSize(151, 80)  
+        }    
+        else
+        {
+            button.lbl.setSize(181, 45)          
+        }  
+
+        button.lbl.setText(type); 
+
+        goog.events.listen(button.buttonImage, ['mousedown','touchstart'], button.animate, true, button);
+    } 
 
     return button;
 };
@@ -147,6 +138,8 @@ rb.TileButton.prototype.pause = function(e) {
  */
 rb.TileButton.prototype.unpause = function(e) {
     this.paused = false;
+
+    this.lbl.setHidden(false);
 }
 
 /**
@@ -156,68 +149,62 @@ rb.TileButton.prototype.animate = function(e) {
 
     var target = this;
 
-    console.log('animate', target.animating, target.paused);
-
     if(target.animating == false && target.paused == false)
     {
         var animation;
 
         target.animating = true;
 
-        target.backgroundAnimation.setHidden(false);
-
-        if(target.selected)
+        
+        if(target.type == 'game')  
         {
-            if(target.type == 'game')    
+            if(target.selected)
             {
                 target.backgroundAnimation.setScale(1.8);
-                target.backgroundAnimation.setFill('assets/node-green-interaction-whole.png');
-            }
-                
-            if(target.ios)
-            {
-                animation = new lime.animation.ScaleTo(1).setDuration(0.5).enableOptimizations();
+                target.backgroundAnimation.setHidden(false);
             }    
             else
             {
-                animation = new lime.animation.ScaleTo(1).setDuration(0.5);
+                target.backgroundAnimationIncorrect.setScale(1.5);
+                target.backgroundAnimationIncorrect.setHidden(false);
             }    
+        }    
+        else
+        {
+             target.backgroundAnimation.setScale(1.5);
+             target.backgroundAnimation.setHidden(false);
+        }    
+
+        if(target.ios)
+        {
+            animation = new lime.animation.ScaleTo(0.9).setDuration(0.5).enableOptimizations();
+        }    
+        else
+        {
+            animation = new lime.animation.ScaleTo(0.9).setDuration(0.5);
+        }     
+
+        if(target.type == 'game' && target.selected == false)
+        {
+            target.backgroundAnimationIncorrect.runAction(animation);
         }
         else
         {
-            if(target.ios)
-            {
-                animation = new lime.animation.Spawn(
-                    new lime.animation.RotateBy(180).setDuration(0.5).enableOptimizations(),
-                    new lime.animation.ScaleTo(1).setDuration(0.5).enableOptimizations()
-                );
-            }    
-            else
-            {
-                if(target.type == 'game')
-                {
-                    target.backgroundAnimation.setScale(1.5);
-                    target.backgroundAnimation.setFill('assets/start-play-animation.png');
-                }    
-                
-                animation = new lime.animation.Spawn(
-                    new lime.animation.RotateBy(180).setDuration(0.5),
-                    new lime.animation.ScaleTo(1).setDuration(0.5)             
-                );
-            }
-        }   
-
-        target.backgroundAnimation.runAction(animation);
+            target.backgroundAnimation.runAction(animation);
+        }    
 
         goog.events.listen(animation, lime.animation.Event.STOP, function(){
 
-            target.backgroundAnimation.setHidden(true);
-            target.backgroundAnimation.setScale(1.5);
-
+            // target.backgroundAnimation.setHidden(true);
+            
             target.animating = false;
 
-            if(target.type != 'game')
-            {    
+            if(target.type == 'game')
+            {  
+                target.backgroundAnimationIncorrect.setHidden(true);
+            }
+            else
+            { 
                 target.eventTarget.dispatchEvent(target.lbl.getText());
             }
         })
@@ -253,11 +240,9 @@ rb.TileButton.prototype.select = function(highlight) {
 
     var size = this.getSize().clone();
 
-    console.log(size);
-
     if(highlight)
     {
-        this.highlight = new lime.Sprite().setFill('assets/node-green-on.png');
+        this.highlight = new lime.Sprite().setFill(this.tileSelect);
         this.appendChild(this.highlight, 100);       
     }    
 
@@ -275,6 +260,19 @@ rb.TileButton.prototype.deselect = function() {
     this.selected = false;
 };
 
+/**
+ * Remove selection highlight
+ */
+rb.TileButton.prototype.flash = function() {
+
+    this.circle.setHidden(false)
+
+    lime.scheduleManager.callAfter(function(){
+        
+         this.circle.setHidden(true)
+
+     }, this, 175);
+};
 
 /**
  * @inheritDoc

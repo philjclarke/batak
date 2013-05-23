@@ -1,7 +1,7 @@
 goog.provide('rb.Variables');
 
 rb.Mode = {
-    DEBUG: true 
+    DEBUG: false 
 };    
 
 rb.GAME = {
@@ -18,47 +18,69 @@ rb.RESULTS = {
     INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
 };
 
+rb.NAV = {
+    START_CONTINUE_UP: 'assets/start-play-button.png',
+    START_CONTINUE_DOWN: 'assets/start-play-animation.png',
+    RESTART_UP: 'assets/restart-button-grey.png',
+    RESTART_DOWN: 'assets/restart-grey-animation.png' 
+}
+
 rb.LEVEL1 = {
     score: 0,
     bestScore: 0,
     art: 0,
-    bestART: 0,
+    bestART: null,
     TILES: 12,
     INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    TIME: 5,
+    TIME: 10,
     LEVEL_IMAGE: 'assets/level_1_diagram.png',
     TILE_UP: 'assets/node-green.png',    
-    TILE_SELECT: 'assets/countdown-green.png', 
-    TILE_DOWN: 'assets/node-green-interaction-whole.png'
+    TILE_SELECT: 'assets/node-green-stroke.png',
+    TILE_DOWN: 'assets/node-green-interaction-whole.png',
+    TILE_INCORRECT: 'assets/node-incorrect.png',
+    TILE_COUNTDOWN_UP: 'assets/node-green-stroke-large.png',
+    TILE_COUNTDOWN_DOWN: 'assets/node-green-interaction-whole.png',       
+    LINE_COLOR: '#ADC261',
+    TEXT_COLOR: '#FFFFFF'
 };
 
 rb.LEVEL2 = {
     score: 0,
     bestScore: 0,
     art: 0,
-    bestART: 0,
+    bestART: null,
     TILES: 12,
     INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     TIME: 20,
     LEVEL_IMAGE: 'assets/level_2_diagram.png',
-    TILE_UP: 'assets/node-orange.png',    
-    TILE_SELECT: 'assets/countdown-orange.png', 
-    TILE_DOWN: 'assets/node-orange-interaction-whole.png'        
+    TILE_UP: 'assets/node-orange-stroke.png',    
+    TILE_SELECT: 'assets/node-orange-stroke.png', 
+    TILE_DOWN: 'assets/node-orange-interaction-whole.png',
+    TILE_INCORRECT: 'assets/node-incorrect.png',
+    TILE_COUNTDOWN_UP: 'assets/node-orange-stroke-large.png',
+    TILE_COUNTDOWN_DOWN: 'assets/node-orange-interaction-whole.png',       
+    LINE_COLOR: '#ff6600',
+    TEXT_COLOR: '#333333'        
 };
 
 rb.LEVEL3 = {
     score: 0,
     bestScore: 0,
     art: 0,
-    bestART: 0,    
+    bestART: null,    
 	TILES: 12,
-    TIME: 5,
+    TIME: 20,
 	INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     MAX_SUBTRACTION: 100,
     MAX_DIVISION: 100,
     OPERATORS: ["x", "-", "+"],
     LEVEL_IMAGE: 'assets/level_3_diagram.png',
-    TILE_UP: 'assets/node-blue.png',    
-    TILE_SELECT: 'assets/countdown-blue.png', 
-    TILE_DOWN: 'assets/node-blue-interaction-whole.png'       
+    TILE_UP: 'assets/node-blue-stroke.png',   
+    TILE_SELECT: 'assets/node-blue-stroke.png',
+    TILE_DOWN: 'assets/node-blue-interaction-whole.png',
+    TILE_INCORRECT: 'assets/node-incorrect.png',
+    TILE_COUNTDOWN_UP: 'assets/node-blue-stroke-large.png',
+    TILE_COUNTDOWN_DOWN: 'assets/node-blue-interaction-whole.png',      
+    LINE_COLOR: '#006699',
+    TEXT_COLOR: '#333333'           
 };
