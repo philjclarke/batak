@@ -31,12 +31,12 @@ rb.Game = function(level, eventTarget) {
     layer.appendChild(smallLogo, 1);
     */
 
-    // TEMP
-    /*
-    var background = new lime.Sprite().setSize(rb.WIDTH,rb.HEIGHT).
-        setFill('#cccccc').setAnchorPoint(0,0);
-    layer.appendChild(background);
-    */
+    if(rb.Mode.BACKGROUND_DEBUG)
+    {
+        var background = new lime.Sprite().setSize(rb.WIDTH,rb.HEIGHT).
+            setFill('#eeeeee').setAnchorPoint(0,0);
+        layer.appendChild(background);
+    }  
 
     // Header background
     var headerBackground = new lime.Sprite().setFill('assets/header.png').setAnchorPoint(0, 0).setPosition(0, 0);
@@ -206,14 +206,20 @@ rb.Game.prototype.updateScore = function() {
 
     if (this.points > currentScore)
     {
+        console.log(currentScore);
+
+        currentScore + this.points;
+
         if(currentScore < 10)
         {
-            currentScore = "00" + this.points;
+            currentScore = "00" + currentScore;
         }    
         else if(currentScore >= 10)
         {
-            currentScore = "0" + this.points;
+            currentScore = "0" + currentScore;
         }   
+
+        console.log(currentScore);
 
         this.scoreText.setText(currentScore);
     }

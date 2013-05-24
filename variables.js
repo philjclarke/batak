@@ -1,7 +1,9 @@
 goog.provide('rb.Variables');
 
 rb.Mode = {
-    DEBUG: false 
+    DEBUG: false, 
+    BACKGROUND_DEBUG: false, 
+    BACKGROUND_COLOR: '#aaaaaa' 
 };    
 
 rb.GAME = {

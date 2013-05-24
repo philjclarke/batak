@@ -11,10 +11,10 @@ rb.LevelIntro = function(level, intoText, levelImage, highestScore, eventTarget)
     var layer = new lime.Layer().setPosition(0, 0);
     var padding = 20;
 
-    if(rb.Mode.DEBUG)
+    if(rb.Mode.BACKGROUND_DEBUG)
     {
         var background = new lime.Sprite().setSize(rb.WIDTH,rb.HEIGHT).
-            setFill('#272628').setAnchorPoint(0,0);
+            setFill(rb.Mode.BACKGROUND_COLOR).setAnchorPoint(0,0);
         layer.appendChild(background);
     }    
 

@@ -29,22 +29,28 @@ rb.GameManager = function() {
     {   
         // this.showSplash();
 
-        this.showStartScreen();
+        // this.showStartScreen();
 
         // rb.GAME.currentLevel = 2;
         // this.loadLevel();
 
         // this.loadGame();
 
-        // this.showLevelEnd();
-
         // this.showEndScreen();
+
+        // this.showLevelEnd();
     }
     else
     {
-        this.showStartScreen();    
+        // this.showSplash();
 
-        // this.showEndScreen();  
+        // this.showStartScreen();
+
+        // this.showEndScreen();
+
+        // this.showLevelEnd();
+
+        this.showSplash();
     }       
 };
 
@@ -108,10 +114,10 @@ rb.GameManager.prototype.showStartScreen = function() {
     var startScene = new lime.Scene(),
         layer = new lime.Layer().setPosition(0, 0); 
 
-    if(rb.Mode.DEBUG)
+    if(rb.Mode.BACKGROUND_DEBUG)
     {
         var background = new lime.Sprite().setSize(rb.WIDTH,rb.HEIGHT).
-            setFill('#272628').setAnchorPoint(0,0);
+            setFill(rb.Mode.BACKGROUND_COLOR).setAnchorPoint(0,0);
         layer.appendChild(background);
     }    
 

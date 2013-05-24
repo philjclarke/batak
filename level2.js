@@ -25,7 +25,7 @@ rb.Level2 = function(eventTarget) {
     this.instructionsText = new lime.Label().setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
     setAnchorPoint(0.5, 0).setPosition(rb.WIDTH / 2, 183).setSize(370, 60);
 
-    this.instructionsText.setText('Hit an Even number');
+    this.instructionsText.setText('hit an even number');
 
     if(rb.Mode.DEBUG)
     this.instructionsText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
