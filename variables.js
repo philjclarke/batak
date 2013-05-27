@@ -2,7 +2,7 @@ goog.provide('rb.Variables');
 
 rb.Mode = {
     DEBUG: false, 
-    BACKGROUND_DEBUG: false, 
+    BACKGROUND_DEBUG: true, 
     BACKGROUND_COLOR: '#aaaaaa' 
 };    
 

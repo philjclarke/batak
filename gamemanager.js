@@ -39,6 +39,8 @@ rb.GameManager = function() {
         // this.showEndScreen();
 
         // this.showLevelEnd();
+
+        this.showEndScreen();
     }
     else
     {
@@ -48,9 +50,13 @@ rb.GameManager = function() {
 
         // this.showEndScreen();
 
+        // this.showSplash();
+
         // this.showLevelEnd();
 
-        this.showSplash();
+        // this.loadGame();
+
+        this.showEndScreen();
     }       
 };
 

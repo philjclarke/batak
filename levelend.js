@@ -70,7 +70,7 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
     // Your score heading
     var yourScoreHeading = new lime.Label().setText('your score').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(24).
-        setAlign('right').setAnchorPoint(0, 1).setSize(150, 40).setPosition(rb.WIDTH * 0.15 - (padding / 2), 350);
+        setAlign('center').setAnchorPoint(1, 1).setSize(150, 40).setPosition(rb.WIDTH * 0.5 - (padding / 2), 350);
 
     if(rb.Mode.DEBUG)
     yourScoreHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -79,20 +79,20 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
 
     // Your score background
-    var yourScoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.15 + (padding / 2), 350);
+    var yourScoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(1, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.5 - (padding / 2), 350);
 
     layer.appendChild(yourScoreBackground, 1);
 
     // Score
     this.scoreText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(80).
-        setAlign('center').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.15 + (padding / 2), 345);
+        setAlign('center').setAnchorPoint(1, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.5 - (padding / 2), 345);
     
     layer.appendChild(this.scoreText, 2);
 
 
     // Your score heading
     var highestScoreHeading = new lime.Label().setText('highest score').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(24).
-        setAlign('right').setAnchorPoint(0, 1).setSize(150, 40).setPosition(rb.WIDTH * 0.55 + (padding / 2), 350);
+        setAlign('center').setAnchorPoint(0, 1).setSize(150, 40).setPosition(rb.WIDTH * 0.5 + (padding / 2), 350);
 
     if(rb.Mode.DEBUG)
     highestScoreHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -101,7 +101,7 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
 
     // Your score background
-    var highestScoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.55 + (padding / 2), 350);
+    var highestScoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.5 + (padding / 2), 350);
 
     if(rb.Mode.DEBUG)
     highestScoreBackground.setStroke(new lime.fill.Stroke(1, '#77B800'));
@@ -111,7 +111,7 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
     // Score
     this.highestScoreText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#77B800').setFontSize(80).
-        setAlign('center').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.55 + (padding / 2), 345);
+        setAlign('center').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.5 + (padding / 2), 345);
     
     if(rb.Mode.DEBUG)
     this.highestScoreText.setStroke(new lime.fill.Stroke(1, '#77B800'));
@@ -121,7 +121,7 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
     // Your reaction time heading
     var yourARTHeading = new lime.Label().setText('your reaction time').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(24).
-        setAlign('center').setAnchorPoint(0, 1).setSize(220, 40).setPosition(rb.WIDTH * 0.15 + (padding / 2), 525);
+        setAlign('center').setAnchorPoint(1, 1).setSize(220, 40).setPosition(rb.WIDTH * 0.5 - (padding / 2), 525);
 
     if(rb.Mode.DEBUG)
     yourARTHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -130,7 +130,7 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
 
     // Your reaction time background
-    var yourARTBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.15 + (padding / 2), 525);
+    var yourARTBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(1, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.5 - (padding / 2), 525);
 
     if(rb.Mode.DEBUG)
     yourARTBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -140,10 +140,10 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
     // Your reaction time text
     this.yourARTText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(80).
-        setAlign('left').setAnchorPoint(0, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.15 + padding / 2 + backgroundPadding, 525 - backgroundPadding);
+        setAlign('left').setAnchorPoint(1, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.5 - (padding / 2) + backgroundPadding, 525 - backgroundPadding);
     
     var msText1 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(0, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.15 + padding / 2 - backgroundPadding, 525 - backgroundPadding);
+        setAlign('right').setAnchorPoint(1, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.5 - (padding / 2) - backgroundPadding, 525 - backgroundPadding);
            
     if(rb.Mode.DEBUG)
     msText1.setStroke(new lime.fill.Stroke(1, '#77B800'));
@@ -158,7 +158,7 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
     // Your reaction time heading
     var bestARTHeading = new lime.Label().setText('best reaction time').setFontFamily(rb.GAME.FONT).setFontColor('#77B800').setFontSize(24).
-        setAlign('center').setAnchorPoint(0, 1).setSize(220, 40).setPosition(rb.WIDTH * 0.55 + (padding / 2), 525);
+        setAlign('center').setAnchorPoint(0, 1).setSize(220, 40).setPosition(rb.WIDTH * 0.5 + (padding / 2), 525);
 
     if(rb.Mode.DEBUG)
     bestARTHeading.setStroke(new lime.fill.Stroke(1, '#77B800'));
@@ -167,7 +167,7 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
 
     // best reaction time background
-    var bestARTBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.55 + (padding / 2), 525);
+    var bestARTBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.5 + (padding / 2), 525);
 
     if(rb.Mode.DEBUG)
     bestARTBackground.setStroke(new lime.fill.Stroke(1, '#77B800'));
@@ -177,11 +177,11 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
     // best reaction time text
     this.bestARTText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#77B800').setFontSize(80).
-        setAlign('left').setAnchorPoint(0, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.55 + padding / 2 + backgroundPadding, 525 - backgroundPadding);
+        setAlign('left').setAnchorPoint(0, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.5 + (padding / 2) + backgroundPadding, 525 - backgroundPadding);
     
 
     var msText2 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#77B800').setFontSize(36).
-        setAlign('right').setAnchorPoint(0, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.55 + padding / 2 - backgroundPadding, 525 - backgroundPadding);
+        setAlign('right').setAnchorPoint(0, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.5 + (padding / 2) - backgroundPadding, 525 - backgroundPadding);
 
     if(rb.Mode.DEBUG)
     msText2.setStroke(new lime.fill.Stroke(1, '#77B800'));
@@ -193,11 +193,11 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
     layer.appendChild(this.bestARTText, 3);
 
-    this.restartButton = new rb.TileButton.type("restart level", eventTarget, rb.NAV.RESTART_UP, rb.NAV.RESTART_DOWN).setAnchorPoint(0.55, 0.55).setPosition(rb.WIDTH * 0.25, 790);
+    this.restartButton = new rb.TileButton.type("restart level", eventTarget, rb.NAV.RESTART_UP, rb.NAV.RESTART_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH * 0.25, 790);
 
     layer.appendChild(this.restartButton, 8);
 
-    this.playButton = new rb.TileButton.type("continue", eventTarget, rb.NAV.START_CONTINUE_UP, rb.NAV.START_CONTINUE_DOWN).setAnchorPoint(0.55, 0.55).setPosition(rb.WIDTH * 0.75, 790);
+    this.playButton = new rb.TileButton.type("continue", eventTarget, rb.NAV.START_CONTINUE_UP, rb.NAV.START_CONTINUE_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH * 0.75, 790);
 
     layer.appendChild(this.playButton, 7);
 
@@ -258,8 +258,6 @@ rb.LevelEnd.prototype.updateYourARTLabel = function(value)
 
 rb.LevelEnd.prototype.updateBestARTLabel = function(value)
 {
-    console.log('value', value);
-
     if(value != 0 && value != null)
     {
         value = parseInt(value * 10) / 10;

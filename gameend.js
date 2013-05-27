@@ -9,7 +9,7 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
     lime.Scene.call(this);
 
     var layer = new lime.Layer().setPosition(0, 0);
-    var padding = 20;
+    var padding = 16;
     var backgroundPadding = 5;
 
     if(rb.Mode.BACKGROUND_DEBUG)
@@ -24,7 +24,7 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
     layer.appendChild(background);
 
     var headerBackground = new lime.Sprite().setFill('assets/header.png').setAnchorPoint(0, 0).setPosition(0, 0);
-    layer.appendChild(headerBackground, 1);
+    // layer.appendChild(headerBackground, 1);
 
 
     rb.Mode.DEBUG = true;
@@ -35,26 +35,39 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
         this.height = height;
     }
 
-    var h1Size = 0;
+    var h1Size = 48;
     var h2Size = 36;
 
     var scoreRect = new Dimensions(150, 75);
-    var artRect = new Dimensions(180, 75);
+    var artRect = new Dimensions(220, 75);
 
-    var scoreColumn = new lime.Layer().setPosition(0, 400);
-    var topScoreColumn = new lime.Layer().setPosition(scoreRect.width + padding, 400);
+    var scoreColumn = new lime.Layer().setPosition(rb.WIDTH * 0.5 - scoreRect.width - 75, 100);
+    var topScoreColumn = new lime.Layer().setPosition(rb.WIDTH * 0.5 + padding + 75, 100);
 
-    var artColumn = new lime.Layer().setPosition((scoreRect.width + padding) * 2, 400);
-    var topARTColumn = new lime.Layer().setPosition((scoreRect.width + padding) * 2 + (artRect.width + padding), 400);
+    var artColumn = new lime.Layer().setPosition(rb.WIDTH * 0.5 - artRect.width - 75, 450);
+    var topARTColumn = new lime.Layer().setPosition(rb.WIDTH * 0.5 + padding + 75, 450);
 
+    var headerBackground = new lime.Sprite().setFill('assets/header.png').setAnchorPoint(0, 0).setPosition(0, 0);
+    // layer.appendChild(headerBackground, 10);
+
+
+    var yourResultsHeading = new lime.Label().setText('your results').setFontFamily(rb.GAME.FONT).setFontSize(h1Size).setAlign('center').setFontColor('#ffffff')
+    .setAnchorPoint(1, 1).setSize(350, 100).setPosition(rb.WIDTH * 0.5, 125);
+    layer.appendChild(yourResultsHeading, 10);
+
+    var bestResults = new lime.Label().setText('best results').setFontFamily(rb.GAME.FONT).setFontSize(h1Size).setAlign('center').setFontColor('#ffffff')
+    .setAnchorPoint(0, 1).setSize(350, 100).setPosition(rb.WIDTH * 0.5, 125);
+    layer.appendChild(bestResults, 10);
+
+    var level1Image = new lime.Sprite().setFill('assets/green-blobs-small-490x19.png').setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH * 0.5, 200);
+    layer.appendChild(level1Image, 10);
+ 
 
     // Your score heading
-    var yourScoreHeading = new lime.Label().setText('your score').setFontFamily(rb.GAME.FONT).setFontSize(h2Size).setFontColor('#ffffff')
-    .setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, - scoreRect.height - padding);
+    var yourScoreHeading = new lime.Label().setText('score').setFontFamily(rb.GAME.FONT).setFontSize(h2Size).setFontColor('#ffffff')
+    .setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, - scoreRect.height + 20);
 
-    yourScoreHeading.setText('your score');
-
-    scoreColumn.appendChild(yourScoreHeading);
+    // scoreColumn.appendChild(yourScoreHeading);
 
     // Your score background 1
     var yourScoreBackground1 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, 0);
@@ -118,11 +131,11 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
 
     // Top score heading
     var topScoreHeading = new lime.Label().setFontFamily(rb.GAME.FONT).setFontSize(h2Size).setFontColor('#ffffff')
-    .setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, -scoreRect.height);
+    .setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, - scoreRect.height);
 
-    topScoreHeading.setText('top score');
+    topScoreHeading.setText('score');
 
-    topScoreColumn.appendChild(topScoreHeading);
+    // topScoreColumn.appendChild(topScoreHeading);
 
 
     // Top score background 1
@@ -187,11 +200,11 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
 
     // Your reaction time heading
     var yourReactionTimeHeading = new lime.Label().setFontFamily(rb.GAME.FONT).setFontSize(h2Size).setFontColor('#ffffff')
-    .setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, -scoreRect.height);
+    .setAlign('center').setAnchorPoint(0, 0).setSize(artRect.width + 50, artRect.height).setPosition(0, - scoreRect.height);
 
-    yourReactionTimeHeading.setText('your reaction time');
+    yourReactionTimeHeading.setText('reaction time');
 
-    artColumn.appendChild(yourReactionTimeHeading);
+    // artColumn.appendChild(yourReactionTimeHeading);
 
 
     // your average reaction time background 1
@@ -207,46 +220,46 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
     artColumn.appendChild(this.yourARTText1, 2);
         
 
-    var msText1 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(40).
+    var msText1 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
         setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding , 0 + backgroundPadding);
            
-    // artColumn.appendChild(msText1, 3);
+    artColumn.appendChild(msText1, 3);
 
 
     // your average reaction time background 2
-    var yourARTBackground2 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, artRect.height);
+    var yourARTBackground2 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, (artRect.height + padding));
 
     artColumn.appendChild(yourARTBackground2, 1);
 
 
     // your average reaction time text
     this.yourARTText2 = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#77B800').setFontSize(80).
-        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, artRect.height - backgroundPadding);
+        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, (artRect.height + padding) - backgroundPadding);
 
     artColumn.appendChild(this.yourARTText2, 2);
 
-    var msText2 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(40).
-        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding , artRect.height+ backgroundPadding);
+    var msText2 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
+        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding , (artRect.height + padding) + backgroundPadding);
            
-    // artColumn.appendChild(msText2, 3);
+    artColumn.appendChild(msText2, 3);
 
 
     // your average reaction time background 3
-    var yourARTBackground3 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, artRect.height * 2);
+    var yourARTBackground3 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, (artRect.height + padding) * 2);
 
     artColumn.appendChild(yourARTBackground3, 1);
 
 
     // your average reaction time text
     this.yourARTText3 = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#77B800').setFontSize(80).
-        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, (artRect.height) * 2 - backgroundPadding);
+        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, (artRect.height + padding) * 2 - backgroundPadding);
 
     artColumn.appendChild(this.yourARTText3, 2);
 
-    var msText3 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(40).
-        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding , artRect.height * 2 + backgroundPadding);
+    var msText3 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
+        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding , (artRect.height + padding) * 2 + backgroundPadding);
            
-    // artColumn.appendChild(msText3, 3);
+    artColumn.appendChild(msText3, 3);
 
 
     //////////////////////////
@@ -254,11 +267,11 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
 
     // Top reaction time heading
     var topReactionTimeHeading = new lime.Label().setFontFamily(rb.GAME.FONT).setFontSize(h2Size).setFontColor('#ffffff')
-    .setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, -scoreRect.height);
+    .setAlign('center').setAnchorPoint(0, 0).setSize(artRect.width + 50, artRect.height).setPosition(0, -scoreRect.height);
 
-    topReactionTimeHeading.setText('top reaction time');
+    topReactionTimeHeading.setText('reaction time');
 
-    topARTColumn.appendChild(topReactionTimeHeading);
+    // topARTColumn.appendChild(topReactionTimeHeading);
 
 
     // top average reaction time background 1
@@ -273,47 +286,49 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
 
     topARTColumn.appendChild(this.topARTText1, 2);
         
-    var msText4 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(40).
+    var msText4 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
         setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding , 0 + backgroundPadding);
            
-    // topARTColumn.appendChild(msText4, 3);
+    topARTColumn.appendChild(msText4, 3);
 
     // top average reaction time background 2
-    var topARTBackground2 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, artRect.height);
+    var topARTBackground2 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, (artRect.height + padding));
 
     topARTColumn.appendChild(topARTBackground2, 1);
 
 
     // top average reaction time text
     this.topARTText2 = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#77B800').setFontSize(80).
-        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, artRect.height - backgroundPadding);
+        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, (artRect.height + padding) - backgroundPadding);
 
     topARTColumn.appendChild(this.topARTText2, 2);
 
-    var msText5 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(40).
-        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding , artRect.height + backgroundPadding);
+    var msText5 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
+        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding , (artRect.height + padding) - backgroundPadding);
            
-    // topARTColumn.appendChild(msText5, 3);
+    topARTColumn.appendChild(msText5, 3);
 
 
     // top average reaction time background 3
-    var topARTBackground3 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(artRect.width - 10, artRect.height).setPosition(0, (artRect.height) * 2);
+    var topARTBackground3 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, (artRect.height + padding) * 2);
 
     topARTColumn.appendChild(topARTBackground3, 1);
 
 
     // top average reaction time text
     this.topARTText3 = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#77B800').setFontSize(80).
-        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width - 15, artRect.height).setPosition(0, (artRect.height) * 2 - backgroundPadding);
+        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, (artRect.height + padding) * 2 - backgroundPadding);
 
     topARTColumn.appendChild(this.topARTText3, 2);
 
     var msText6 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width - 15, artRect.height).setPosition(0 - backgroundPadding , artRect.height * 2 + backgroundPadding);
+        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding , (artRect.height + padding) * 2);
            
     topARTColumn.appendChild(msText6, 3);
 
+    this.restartButton = new rb.TileButton.type("restart", eventTarget, rb.NAV.RESTART_UP, rb.NAV.RESTART_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH * 0.5, rb.HEIGHT * 0.85);
 
+    layer.appendChild(this.restartButton, 8);
 
     this.appendChild(layer, 1);
     this.appendChild(scoreColumn, 2);
@@ -321,15 +336,13 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
     this.appendChild(artColumn, 4);
     this.appendChild(topARTColumn, 4);
     
-    this.yourARTText1.setText('0.1');
-    this.yourARTText2.setText('0.2');
-    this.yourARTText3.setText('0.3');
+    this.yourARTText1.setText('00.1');
+    this.yourARTText2.setText('00.2');
+    this.yourARTText3.setText('00.3');
 
-    this.topARTText1.setText('0.1');
-    this.topARTText2.setText('0.2');
-    this.topARTText3.setText('0.9');
-
-
+    this.topARTText1.setText('00.1');
+    this.topARTText2.setText('00.2');
+    this.topARTText3.setText('00.9');
 
 
     /*
@@ -373,9 +386,7 @@ rb.GameEnd.prototype.updateHighestScoreLabel = function(value)
 }
 
 rb.GameEnd.prototype.updateYourARTLabel = function(value)
-{
-    console.log('value', value);
-
+{   
     if(value != 0)
     {
         value = parseInt(value * 10) / 10;
@@ -387,13 +398,13 @@ rb.GameEnd.prototype.updateYourARTLabel = function(value)
     }
     else
     {
-        this.yourARTText.setText('0.0'); 
-    }    
+        this.yourARTText.setText('00.0'); 
+    }
 }
 
 rb.GameEnd.prototype.updateBestARTLabel = function(value)
 {
-    if(value != 0)
+    if(value != 0 && value != null)
     {
         value = parseInt(value * 10) / 10;
 
@@ -404,6 +415,6 @@ rb.GameEnd.prototype.updateBestARTLabel = function(value)
     }
     else
     {
-        this.bestARTText.setText('0.0'); 
+        this.bestARTText.setText('00.0'); 
     } 
 }

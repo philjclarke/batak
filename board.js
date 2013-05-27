@@ -35,6 +35,8 @@ rb.Board = function(game, level, eventTarget) {
     this.cols = 5;
     this.rows = 5;
 
+    this.heightOffset = 25;
+
     this.GAP = Math.round(this.SIZE / this.cols);
 
     this.setSize(this.SIZE, this.SIZE).setAnchorPoint(0, 0);
@@ -104,7 +106,7 @@ rb.Board.prototype.createBoard = function() {
                 index = index + 1;
 
                 var nodeTarget = new rb.TileButton.type("game", this.eventTarget, this.level.TILE_UP, this.level.TILE_DOWN, this.level.TILE_SELECT, this.level.TILE_INCORRECT, this.level.TEXT_COLOR);
-                nodeTarget.setPosition((c + .5) * this.GAP, (r + .5) * this.GAP);
+                nodeTarget.setPosition((c + .5) * this.GAP, (r + .5) * (this.GAP + this.heightOffset));
                 nodeTarget.setSize(this.GAP / 2 , this.GAP / 2);
                 this.gameBoard.appendChild(nodeTarget, this.gameBoard.getNumberOfChildren() - 1);
 
