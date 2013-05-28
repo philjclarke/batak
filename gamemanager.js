@@ -34,13 +34,13 @@ rb.GameManager = function() {
         // rb.GAME.currentLevel = 2;
         // this.loadLevel();
 
-        // this.loadGame();
+        this.loadGame();
 
         // this.showEndScreen();
 
         // this.showLevelEnd();
 
-        this.showEndScreen();
+        // this.showEndScreen();
     }
     else
     {
@@ -54,9 +54,9 @@ rb.GameManager = function() {
 
         // this.showLevelEnd();
 
-        // this.loadGame();
+        this.loadGame();
 
-        this.showEndScreen();
+        // this.showEndScreen();
     }       
 };
 

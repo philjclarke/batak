@@ -26,6 +26,20 @@ rb.Game = function(level, eventTarget) {
 
     var padding = 20;
 
+    function Dimensions(width, height)
+    {
+        this.width = width;
+        this.height = height;
+    }
+
+    var scoreRect = new Dimensions(150, 75);
+    var timeRect = new Dimensions(100, 75);
+
+    var timeX = 200;
+    var scoreX = 450;
+
+    var backgroundPadding = 5;
+
     /* Need to update logo TEMP
     var smallLogo = new lime.Sprite().setFill('assets/ingame-logo-x40y32-HexBG-272528.gif').setAnchorPoint(0, 0).setPosition(35, 35);
     layer.appendChild(smallLogo, 1);
@@ -47,17 +61,50 @@ rb.Game = function(level, eventTarget) {
     
     if(rb.isBrokenChrome()) this.board.setRenderer(lime.Renderer.CANVAS);
 
-    var timeBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0.5).setSize(80, 50).setPosition(600, rb.GAME.HEADER_HEIGHT / 2);
+
+    // Score background
+    var scoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0.5).setSize(scoreRect.width, scoreRect.height).setPosition(scoreX, rb.GAME.HEADER_HEIGHT / 2);
+
+    if(rb.Mode.DEBUG)
+    scoreBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+
+    layer.appendChild(scoreBackground, 3);
+
+    // Score
+    this.scoreText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(80).
+        setAlign('center').setAnchorPoint(0, 0.5).setSize(scoreRect.width, scoreRect.height).setPosition(scoreX, rb.GAME.HEADER_HEIGHT / 2 - backgroundPadding);
+    
+    if(rb.Mode.DEBUG)
+    this.scoreText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+
+    layer.appendChild(this.scoreText, 4);
+
+    // Score heading
+    var scoreHeading = new lime.Label().setText('score').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
+        setAlign('right').setAnchorPoint(1, 0.5).setSize(150, 50).setPosition(scoreX - padding, rb.GAME.HEADER_HEIGHT / 2);
+
+    if(rb.Mode.DEBUG)
+    scoreHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+
+    layer.appendChild(scoreHeading, 8);
+
+
+    // Time background
+    var timeBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0.5).setSize(timeRect.width, timeRect.height).setPosition(timeX, rb.GAME.HEADER_HEIGHT / 2);
 
     if(rb.Mode.DEBUG)
     timeBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
-    layer.appendChild(timeBackground, 3);
+    layer.appendChild(timeBackground, 8);
 
-    // Time
-    this.timeText = new lime.Label().setText('00').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(48).
-        setAlign('center').setAnchorPoint(0, 0.5).setSize(80, 50).setPosition(600, rb.GAME.HEADER_HEIGHT / 2);
+
+    // Time text
+    this.timeText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(80).
+        setAlign('center').setAnchorPoint(0, 0.5).setSize(timeRect.width, timeRect.height).setPosition(timeX, rb.GAME.HEADER_HEIGHT / 2 - backgroundPadding);
     
+    if(rb.Mode.DEBUG)
+    this.timeText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+
     if(this.currentTime < 10)
     {
         this.timeText.setText('0' + this.currentTime);
@@ -67,45 +114,14 @@ rb.Game = function(level, eventTarget) {
         this.timeText.setText(this.currentTime);
     } 
 
-    if(rb.Mode.DEBUG)
-    this.timeText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
+    layer.appendChild(this.timeText, 9);
 
-    layer.appendChild(this.timeText, 4);
 
-    // Highest score heading
+    // Time heading
     var timeHeading = new lime.Label().setText('time').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(1, 0.5).setSize(100, 50).setPosition(600 - padding, rb.GAME.HEADER_HEIGHT / 2);
+        setAlign('right').setAnchorPoint(1, 0.5).setSize(150, 50).setPosition(timeX - padding, rb.GAME.HEADER_HEIGHT / 2);
 
-    if(rb.Mode.DEBUG)
-    timeHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
-           
-    layer.appendChild(timeHeading, 4);
-
-    // Highest score heading
-    var scoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0.5).setSize(100, 50).setPosition(350, rb.GAME.HEADER_HEIGHT / 2);
-
-    if(rb.Mode.DEBUG)
-    scoreBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
-
-    layer.appendChild(scoreBackground, 3);
-
-    // Score
-    this.scoreText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(48).
-        setAlign('center').setAnchorPoint(0, 0.5).setSize(100, 50).setPosition(350, rb.GAME.HEADER_HEIGHT / 2);
-    
-    if(rb.Mode.DEBUG)
-    this.scoreText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
-
-    layer.appendChild(this.scoreText, 4);
-
-    // Highest score heading
-    var scoreHeading = new lime.Label().setText('score').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(1, 0.5).setSize(150, 50).setPosition(350 - padding, rb.GAME.HEADER_HEIGHT / 2);
-
-    if(rb.Mode.DEBUG)
-    scoreHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
-           
-    layer.appendChild(scoreHeading, 4);
+    layer.appendChild(timeHeading, 10);
 
     layer.appendChild(this.board);
 };
@@ -126,9 +142,13 @@ rb.Game.prototype.endGame = function() {
 
     this.board.getCountDown().showTimeUp(); 
 
+    this.board.flashBoard();
+
+    this.board.resetBoard();
+
     goog.events.listenOnce(this.eventTarget, 'time up', function(e){
-            
-            this.resetGame();
+
+            // this.resetGame();
 
             this.eventTarget.dispatchEvent('game over');
 
@@ -206,20 +226,14 @@ rb.Game.prototype.updateScore = function() {
 
     if (this.points > currentScore)
     {
-        console.log(currentScore);
-
-        currentScore + this.points;
-
-        if(currentScore < 10)
+        if(this.points < 10)
         {
-            currentScore = "00" + currentScore;
+            currentScore = "00" + this.points;
         }    
-        else if(currentScore >= 10)
+        else if(this.points >= 10)
         {
-            currentScore = "0" + currentScore;
+            currentScore = "0" + this.points;
         }   
-
-        console.log(currentScore);
 
         this.scoreText.setText(currentScore);
     }

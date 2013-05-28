@@ -27,7 +27,7 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
     // layer.appendChild(headerBackground, 1);
 
 
-    rb.Mode.DEBUG = true;
+    rb.Mode.DEBUG = false;
 
     function Dimensions(width, height)
     {

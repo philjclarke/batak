@@ -2,15 +2,15 @@ goog.provide('rb.Variables');
 
 rb.Mode = {
     DEBUG: false, 
-    BACKGROUND_DEBUG: true, 
+    BACKGROUND_DEBUG: false, 
     BACKGROUND_COLOR: '#aaaaaa' 
 };    
 
 rb.GAME = {
-    INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
     FONT: 'FrutigerNeue1450W01-Reg',  
     FONT_NUMBERS: 'arial, sans-serif',  
-    HEADER_HEIGHT: 78,     
+    HEADER_HEIGHT: 95,     
     HighScore: "010",   
     LEVELS: 3,  
     currentLevel: 1

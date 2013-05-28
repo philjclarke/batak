@@ -21,6 +21,10 @@ rb.LevelIntro = function(level, intoText, levelImage, highestScore, eventTarget)
     var headerBackground = new lime.Sprite().setFill('assets/header.png').setAnchorPoint(0, 0).setPosition(0, 0);
     layer.appendChild(headerBackground, 1);
 
+    var level1Image = new lime.Sprite().setFill(levelImage).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, 350);
+    layer.appendChild(level1Image, 1);
+
+    /*
     var highestScoreBackground = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0.5).setSize(100, 50).setPosition(600, rb.GAME.HEADER_HEIGHT / 2);
 
     if(rb.Mode.DEBUG)
@@ -46,23 +50,26 @@ rb.LevelIntro = function(level, intoText, levelImage, highestScore, eventTarget)
            
     layer.appendChild(highestScoreText, 4);
 
-    var level1Image = new lime.Sprite().setFill(levelImage).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, 350);
-    layer.appendChild(level1Image, 1);
-
     // Level 1 heading
     var level1Heading = new lime.Label().setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(48).
         setAlign('right').setAnchorPoint(1, 0).setSize(160, 150).setPosition(rb.WIDTH * 0.3 - (padding / 2), 600);
 
     level1Heading.setText('level ' + level);
-
+    
     if(rb.Mode.DEBUG)
     level1Heading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
     layer.appendChild(level1Heading, 5);
+    */
 
+    /*
     // Level text
     var level1Text = new lime.Label().setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(24).
         setAlign('left').setAnchorPoint(0, 0).setSize(450, 150).setPosition(rb.WIDTH * 0.3 + (padding / 2), 600);
+    */
+
+    var level1Text = new lime.Label().setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(24).
+        setAlign('left').setAnchorPoint(0, 0).setSize(600, 150).setPosition(75, 600);
 
     if(rb.Mode.DEBUG)
     level1Text.setStroke(new lime.fill.Stroke(1, '#ffffff'));
