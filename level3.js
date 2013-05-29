@@ -15,7 +15,7 @@ rb.Level3 = function(eventTarget) {
 
     this.listenKeys = [];
 
-    this.instructionsBackground = new lime.Sprite().setFill('#3a3b3c').setAnchorPoint(0.5, 0).setPosition(rb.WIDTH / 2, 175).setSize(250, 60);
+    this.instructionsBackground = new lime.Sprite().setFill('#3a3b3c').setAnchorPoint(0.5, 0).setPosition(rb.WIDTH / 2, 175).setSize(370, 60);
 
     if(rb.Mode.DEBUG)
     this.instructionsBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -24,7 +24,7 @@ rb.Level3 = function(eventTarget) {
     this.appendChild(this.instructionsBackground, 3);
 
     this.instructionsText = new lime.Label().setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(60).
-    setAnchorPoint(0.5, 0).setPosition(rb.WIDTH / 2, 175).setSize(250, 60);
+    setAnchorPoint(0.5, 0).setPosition(rb.WIDTH / 2, 175).setSize(370, 60);
 
     if(rb.Mode.DEBUG)
     this.instructionsText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -46,8 +46,6 @@ rb.Level3.prototype.startGame = function()
     goog.events.listenOnce(this.eventTarget, 'countdown finished', function(e){
 
             this.start = Date.now();
-
-            this.setResponseTime();
 
             this.board.startGame();
             
@@ -151,7 +149,12 @@ rb.Level3.prototype.generateQuestion = function()
     if(operator == "x")
     {
         factorsArray = this.findFactors(tileNum);
-        console.log(factorsArray);
+
+        // Make the game a little bit harder by removing multiplication by 1
+        if(factorsArray.length > 1)
+        factorsArray.shift();
+            
+        console.log('factorsArray', factorsArray);
 
         randomNumber = Math.floor(Math.random() * factorsArray.length);
 
@@ -159,7 +162,7 @@ rb.Level3.prototype.generateQuestion = function()
 
         b = this.tile.getText() / factorsArray[randomNumber];
 
-        question = factorsArray[randomNumber] + " x " + b;
+        question = factorsArray[randomNumber] + " x " + b + " = ?";
 
         console.log("x", question, "answer", tileNum);
     }  
@@ -168,7 +171,7 @@ rb.Level3.prototype.generateQuestion = function()
         randomNumber = Math.floor(Math.random() * tileNum) + 1;
         b = tileNum - randomNumber;
 
-        question = b + " + " + randomNumber;
+        question = b + " + " + randomNumber + " = ?";
 
         console.log("+", question, "answer", tileNum);
     }
@@ -178,7 +181,7 @@ rb.Level3.prototype.generateQuestion = function()
 
         b = tileNum + randomNumber;
 
-        question = b + " - " + randomNumber;
+        question = b + " - " + randomNumber + " = ?";
 
         console.log("-", question, "answer", tileNum);
     }

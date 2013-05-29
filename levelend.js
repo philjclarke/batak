@@ -29,20 +29,12 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
     // Level heading
     var levelHeading = new lime.Label().setText('level ' + levelNumber).setFontFamily('arial, sans-serif').setFontColor('#ffffff').setFontWeight(500).setFontSize(56).
-        setAlign('left').setAnchorPoint(0, 0.55).setSize(150, 50).setPosition(530, rb.GAME.HEADER_HEIGHT / 2);
-    
-    if(rb.Mode.DEBUG)
-    levelHeading.setStroke(new lime.fill.Stroke(1, '#ffffff'));
-
+        setAlign('left').setAnchorPoint(0, 0.5).setPosition(500, rb.GAME.HEADER_HEIGHT / 2);
     layer.appendChild(levelHeading, 3);
 
 
     // Game thumb
-    var gameThumb = new lime.Sprite().setFill('assets/green-blobs-small-490x19.png').setAnchorPoint(1, 0.55).setPosition(530 - padding, rb.GAME.HEADER_HEIGHT / 2);
-
-    if(rb.Mode.DEBUG)
-    gameThumb.setStroke(new lime.fill.Stroke(1, '#ffffff'));
-    
+    var gameThumb = new lime.Sprite().setFill(level.LEVEL_THUMB).setSize(76, 76).setAnchorPoint(1, 0.5).setPosition(500 - padding, rb.GAME.HEADER_HEIGHT / 2);
     layer.appendChild(gameThumb, 4);
 
 
@@ -93,7 +85,7 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
 
     // Your score heading
-    var highestScoreHeading = new lime.Label().setText('highest score').setFontFamily(rb.GAME.FONT).setFontColor(level.LINE_COLOR).setFontSize(24).
+    var highestScoreHeading = new lime.Label().setText('highest score').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(24).
         setAlign('center').setAnchorPoint(0, 1).setSize(150, 40).setPosition(rb.WIDTH * 0.5 + (padding / 2), 350);
 
     if(rb.Mode.DEBUG)
@@ -106,17 +98,17 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
     var highestScoreBackground = new lime.Sprite().setFill(backgroundHighestScore).setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.5 + (padding / 2), 350);
 
     if(rb.Mode.DEBUG)
-    highestScoreBackground.setStroke(new lime.fill.Stroke(1, '#77B800'));
+    highestScoreBackground.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
     layer.appendChild(highestScoreBackground, 1);
 
 
     // Score
-    this.highestScoreText = new lime.Label().setText(level.LINE_COLOR).setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#77B800').setFontSize(80).
+    this.highestScoreText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor(level.TEXT_HIGHLIGHT_COLOR).setFontSize(80).
         setAlign('center').setAnchorPoint(0, 0).setSize(150, 75).setPosition(rb.WIDTH * 0.5 + (padding / 2), 345);
     
     if(rb.Mode.DEBUG)
-    this.highestScoreText.setStroke(new lime.fill.Stroke(1, '#77B800'));
+    this.highestScoreText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
     layer.appendChild(this.highestScoreText, 2);
 
@@ -144,13 +136,13 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
     this.yourARTText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(80).
         setAlign('left').setAnchorPoint(1, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.5 - (padding / 2) + backgroundPadding, 525 - backgroundPadding);
     
-    var msText1 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
+    this.msText1 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
         setAlign('right').setAnchorPoint(1, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.5 - (padding / 2) - backgroundPadding, 525 - backgroundPadding);
            
     if(rb.Mode.DEBUG)
-    msText1.setStroke(new lime.fill.Stroke(1, '#77B800'));
+    this.msText1.setStroke(new lime.fill.Stroke(1, level.TEXT_HIGHLIGHT_COLOR));
 
-    layer.appendChild(msText1, 2);
+    layer.appendChild(this.msText1, 2);
            
     if(rb.Mode.DEBUG)
     this.yourARTText.setStroke(new lime.fill.Stroke(1, '#ffffff'));
@@ -159,11 +151,11 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
 
     // Your reaction time heading
-    var bestARTHeading = new lime.Label().setText('best reaction time').setFontFamily(rb.GAME.FONT).setFontColor(level.LINE_COLOR).setFontSize(24).
+    var bestARTHeading = new lime.Label().setText('best reaction time').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(24).
         setAlign('center').setAnchorPoint(0, 1).setSize(220, 40).setPosition(rb.WIDTH * 0.5 + (padding / 2), 525);
 
     if(rb.Mode.DEBUG)
-    bestARTHeading.setStroke(new lime.fill.Stroke(1, '#77B800'));
+    bestARTHeading.setStroke(new lime.fill.Stroke(1, level.TEXT_HIGHLIGHT_COLOR));
 
     layer.appendChild(bestARTHeading);
 
@@ -172,26 +164,26 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
     var bestARTBackground = new lime.Sprite().setFill(backgroundHighestScore).setAnchorPoint(0, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.5 + (padding / 2), 525);
 
     if(rb.Mode.DEBUG)
-    bestARTBackground.setStroke(new lime.fill.Stroke(1, '#77B800'));
+    bestARTBackground.setStroke(new lime.fill.Stroke(1, level.TEXT_HIGHLIGHT_COLOR));
 
     layer.appendChild(bestARTBackground, 1);
 
 
     // best reaction time text
-    this.bestARTText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor(level.LINE_COLOR).setFontSize(80).
+    this.bestARTText = new lime.Label().setText('000').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor(level.TEXT_HIGHLIGHT_COLOR).setFontSize(80).
         setAlign('left').setAnchorPoint(0, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.5 + (padding / 2) + backgroundPadding, 525 - backgroundPadding);
     
 
-    var msText2 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#77B800').setFontSize(36).
+    var msText2 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor(level.TEXT_HIGHLIGHT_COLOR).setFontSize(36).
         setAlign('right').setAnchorPoint(0, 0).setSize(220, 75).setPosition(rb.WIDTH * 0.5 + (padding / 2) - backgroundPadding, 525 - backgroundPadding);
 
     if(rb.Mode.DEBUG)
-    msText2.setStroke(new lime.fill.Stroke(1, '#77B800'));
+    msText2.setStroke(new lime.fill.Stroke(1, level.TEXT_HIGHLIGHT_COLOR));
 
     layer.appendChild(msText2, 2);
 
     if(rb.Mode.DEBUG)
-    this.bestARTText.setStroke(new lime.fill.Stroke(1, '#77B800'));
+    this.bestARTText.setStroke(new lime.fill.Stroke(1, level.TEXT_HIGHLIGHT_COLOR));
 
     layer.appendChild(this.bestARTText, 3);
 
@@ -205,10 +197,21 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
     this.appendChild(layer);
 
+
     this.updateScoreLabel(level.score);
-    this.updateHighestScoreLabel(level.bestScore);
+    this.updateHighestScoreLabel(level.bestScore);   
     this.updateYourARTLabel(level.art);
     this.updateBestARTLabel(level.bestART);
+
+
+    if(level.score >= level.bestScore)
+        this.scoreText.setFontColor(level.TEXT_HIGHLIGHT_COLOR);
+
+    if(level.art >= level.bestART)
+    {
+        this.yourARTText.setFontColor(level.TEXT_HIGHLIGHT_COLOR); 
+        this.msText1.setFontColor(level.TEXT_HIGHLIGHT_COLOR); 
+    }
 };
 
 goog.inherits(rb.LevelEnd, lime.Scene);
@@ -259,7 +262,7 @@ rb.LevelEnd.prototype.updateYourARTLabel = function(value)
     }
     else
     {
-        this.yourARTText.setText('00.0'); 
+        this.yourARTText.setText('00.0');
     }
 }
 

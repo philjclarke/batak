@@ -143,9 +143,6 @@ rb.TileCountDown.prototype.animate = function(sprite, time, type) {
                         
                         target.eventTarget.dispatchEvent(type);
 
-                        // Hide self
-                        target.setHidden(true);
-
                      }, this, 1000);
                 } 
                 else if(type == 'countdown finished')

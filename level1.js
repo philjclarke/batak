@@ -26,8 +26,6 @@ rb.Level1.prototype.startGame = function()
 
             this.start = Date.now();
 
-            this.setResponseTime();
-
             this.board.startGame();
             this.board.selectRandomNode(true);
 
@@ -45,6 +43,8 @@ rb.Level1.prototype.startGame = function()
 
 rb.Level1.prototype.updateLevelScores = function(level)
 {
+    console.log('this.calculateAverageResponseTime()', this.calculateAverageResponseTime());
+
     level.score = this.points;
     level.art = this.calculateAverageResponseTime();
 

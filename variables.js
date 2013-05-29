@@ -30,12 +30,13 @@ rb.NAV = {
 rb.LEVEL1 = {
     score: 0,
     bestScore: 0,
-    art: 0,
+    art: 1,
     bestART: null,
     TILES: 12,
     INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    TIME: 10,
+    TIME: 2,
     LEVEL_IMAGE: 'assets/level_1_diagram.png',
+    LEVEL_THUMB: 'assets/icon_green_black_bg.png',
     TILE_UP: 'assets/node-green.png',    
     TILE_SELECT: 'assets/node-green-stroke.png',
     TILE_DOWN: 'assets/node-green-interaction-whole.png',
@@ -43,40 +44,43 @@ rb.LEVEL1 = {
     TILE_COUNTDOWN_UP: 'assets/node-green-stroke-large.png',
     TILE_COUNTDOWN_DOWN: 'assets/node-green-interaction-whole.png',       
     LINE_COLOR: '#ADC261',
-    TEXT_COLOR: '#FFFFFF'
+    TEXT_COLOR: '#FFFFFF',
+    TEXT_HIGHLIGHT_COLOR: '#77B800'
 };
 
 rb.LEVEL2 = {
     score: 0,
     bestScore: 0,
-    art: 0,
-    bestART: null,
+    art: 2,
+    bestART: 3,
     TILES: 12,
     INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     TIME: 20,
     LEVEL_IMAGE: 'assets/level_2_diagram.png',
+    LEVEL_THUMB: 'assets/icon_orange_black_bg.png',
     TILE_UP: 'assets/node-orange-stroke.png',    
     TILE_SELECT: 'assets/node-orange-stroke.png', 
     TILE_DOWN: 'assets/node-orange-interaction-whole.png',
     TILE_INCORRECT: 'assets/node-incorrect.png',
     TILE_COUNTDOWN_UP: 'assets/node-orange-stroke-large.png',
     TILE_COUNTDOWN_DOWN: 'assets/node-orange-interaction-whole.png',       
-    LINE_COLOR: '#ff6600',
-    TEXT_COLOR: '#333333'        
+    LINE_COLOR: '#FF6600',
+    TEXT_COLOR: '#333333',
+    TEXT_HIGHLIGHT_COLOR: '#FF6600'       
 };
 
 rb.LEVEL3 = {
     score: 0,
     bestScore: 0,
-    art: 0,
+    art: 0.5,
     bestART: null,    
 	TILES: 12,
     TIME: 20,
 	INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    MAX_SUBTRACTION: 100,
-    MAX_DIVISION: 100,
-    OPERATORS: ["x", "-", "+"],
+    MAX_SUBTRACTION: 50,
+    OPERATORS: ["+", "x", "-"],
     LEVEL_IMAGE: 'assets/level_3_diagram.png',
+    LEVEL_THUMB: 'assets/icon_blue_black_bg.png',    
     TILE_UP: 'assets/node-blue-stroke.png',   
     TILE_SELECT: 'assets/node-blue-stroke.png',
     TILE_DOWN: 'assets/node-blue-interaction-whole.png',
@@ -84,5 +88,6 @@ rb.LEVEL3 = {
     TILE_COUNTDOWN_UP: 'assets/node-blue-stroke-large.png',
     TILE_COUNTDOWN_DOWN: 'assets/node-blue-interaction-whole.png',      
     LINE_COLOR: '#006699',
-    TEXT_COLOR: '#333333'           
+    TEXT_COLOR: '#333333',
+    TEXT_HIGHLIGHT_COLOR: '#006699'  
 };

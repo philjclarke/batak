@@ -34,16 +34,18 @@ rb.GameManager = function() {
         // rb.GAME.currentLevel = 2;
         // this.loadLevel();
 
-        this.loadGame();
+        // this.loadGame();
 
         // this.showEndScreen();
 
         // this.showLevelEnd();
 
-        // this.showEndScreen();
+        this.showEndScreen();
     }
     else
     {
+        // this.loadLevel();
+
         // this.showSplash();
 
         // this.showStartScreen();
@@ -54,9 +56,12 @@ rb.GameManager = function() {
 
         // this.showLevelEnd();
 
-        this.loadGame();
+        // this.loadGame();
 
-        // this.showEndScreen();
+        this.showEndScreen();
+
+        // rb.GAME.currentLevel = 2;
+        // this.loadLevel();        
     }       
 };
 
@@ -158,10 +163,26 @@ rb.GameManager.prototype.showStartScreen = function() {
 }
 
 /**
+ * Shows scores end screen
+ */
+rb.GameManager.prototype.showScoreEndScreen = function() {
+    var endScreen = new rb.GameEndScore(rb.LEVEL1, rb.LEVEL2, rb.LEVEL3);
+
+    if(rb.Mode.DEBUG)
+    rb.director.replaceScene(endScreen);
+    else
+    rb.director.replaceScene(endScreen, lime.transitions.SlideInRight);
+
+    goog.events.listenOnce(this.eventTarget, 'play again', function(e){
+        this.showEndScreen();
+    }, false, this);
+}
+
+/**
  * Shows end screen
  */
 rb.GameManager.prototype.showEndScreen = function() {
-    var endScreen = new rb.GameEnd(rb.Level1, rb.Level2, rb.Level3);
+    var endScreen = new rb.GameEnd(rb.LEVEL1, rb.LEVEL2, rb.LEVEL3);
 
     if(rb.Mode.DEBUG)
     rb.director.replaceScene(endScreen);
@@ -192,7 +213,7 @@ rb.GameManager.prototype.loadLevel = function() {
         break;              
     }
 
-    var levelIntro = new rb.LevelIntro(rb.GAME.currentLevel, level.INTRO_TEXT, level.LEVEL_IMAGE, rb.GAME.HighScore, this.eventTarget);
+    var levelIntro = new rb.LevelIntro(rb.GAME.currentLevel, level.INTRO_TEXT, level.LEVEL_IMAGE, level.LEVEL_THUMB, rb.GAME.HighScore, this.eventTarget);
 
     if(rb.Mode.DEBUG)
     rb.director.replaceScene(levelIntro);
@@ -240,6 +261,7 @@ rb.GameManager.prototype.loadGame = function() {
         this.showLevelEnd();
     }, false, this);
 }
+
 
 /**
  * Shows end of level screen

@@ -48,8 +48,6 @@ rb.Level2.prototype.startGame = function()
 
             this.start = Date.now();
 
-            this.setResponseTime();
-
             this.board.startGame();
             
             this.addEventListeners();

@@ -17,7 +17,7 @@ rb.Game = function(level, eventTarget) {
     this.currentTime = this.level.TIME;
 
     this.points = 0;
-    this.responseTime = [0];
+    this.responseTime = [];
     this.eventTarget = eventTarget;
 
     //empty layer for contents
@@ -162,7 +162,7 @@ rb.Game.prototype.endGame = function() {
 rb.Game.prototype.resetGame = function() {
 
     this.points = 0;
-    this.responseTime = [0];
+    this.responseTime.length = 0;
 
     this.scoreText.setText('000');
     this.timeText.setText(this.level.TIME);
@@ -197,13 +197,12 @@ rb.Game.prototype.findFactors = function(value) {
     numbersArray.push(value);
 
     return numbersArray;
- }
+}
 
 /**
  * Generates numbers determined by modulus operation
  */
-rb.Game.prototype.generateNumbers = function(div, mod, total)
-{
+rb.Game.prototype.generateNumbers = function(div, mod, total) {
    var numbersArray = new Array();
 
     for (var i = 1; i < total; i++)
@@ -255,6 +254,8 @@ rb.Game.prototype.setResponseTime = function() {
     var dateNow = Date.now();
     this.responseTime.push((dateNow - this.start) / 1000);
     this.start = dateNow;
+
+    console.log(this.responseTime);
 };
 
 /**
