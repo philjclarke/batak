@@ -57,7 +57,7 @@ rb.Game = function(level, eventTarget) {
     layer.appendChild(headerBackground, 1);
 
     //make board
-    this.board = new rb.Board(this, this.level, eventTarget).setAnchorPoint(0.5, 0).setPosition(15, 150);
+    this.board = new rb.Board(this, this.level, eventTarget).setAnchorPoint(0.5, 0).setPosition(15, 125);
     
     if(rb.isBrokenChrome()) this.board.setRenderer(lime.Renderer.CANVAS);
 

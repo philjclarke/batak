@@ -8,6 +8,7 @@ goog.require('lime.transitions.Dissolve');
 goog.require('lime.transitions.SlideInRight');
 goog.require('rb.Board');
 goog.require('rb.GameEnd');
+goog.require('rb.GameEndScore');
 goog.require('rb.TileButton');
 goog.require('rb.Level1');
 goog.require('rb.Level2');
@@ -27,41 +28,19 @@ rb.GameManager = function() {
 
     if(rb.Mode.DEBUG)
     {   
-        // this.showSplash();
-
-        // this.showStartScreen();
-
-        // rb.GAME.currentLevel = 2;
+        // rb.GAME.currentLevel = 3;
         // this.loadLevel();
 
-        // this.loadGame();
-
-        // this.showEndScreen();
-
-        // this.showLevelEnd();
-
-        this.showEndScreen();
+        this.showSplash();
     }
     else
     {
-        // this.loadLevel();
-
-        // this.showSplash();
-
-        // this.showStartScreen();
+        // rb.GAME.currentLevel = 3;
+        // this.showLevelEnd();
 
         // this.showEndScreen();
 
-        // this.showSplash();
-
-        // this.showLevelEnd();
-
-        // this.loadGame();
-
-        this.showEndScreen();
-
-        // rb.GAME.currentLevel = 2;
-        // this.loadLevel();        
+        this.showSplash();
     }       
 };
 
@@ -166,14 +145,17 @@ rb.GameManager.prototype.showStartScreen = function() {
  * Shows scores end screen
  */
 rb.GameManager.prototype.showScoreEndScreen = function() {
-    var endScreen = new rb.GameEndScore(rb.LEVEL1, rb.LEVEL2, rb.LEVEL3);
+
+    console.log('showScoreEndScreen');
+    var endScoresScreen = new rb.GameEndScore(rb.LEVEL1, rb.LEVEL2, rb.LEVEL3, this.eventTarget);
+
 
     if(rb.Mode.DEBUG)
-    rb.director.replaceScene(endScreen);
+    rb.director.replaceScene(endScoresScreen);
     else
-    rb.director.replaceScene(endScreen, lime.transitions.SlideInRight);
+    rb.director.replaceScene(endScoresScreen, lime.transitions.SlideInRight);
 
-    goog.events.listenOnce(this.eventTarget, 'play again', function(e){
+    goog.events.listenOnce(this.eventTarget, 'reaction times', function(e){
         this.showEndScreen();
     }, false, this);
 }
@@ -182,16 +164,20 @@ rb.GameManager.prototype.showScoreEndScreen = function() {
  * Shows end screen
  */
 rb.GameManager.prototype.showEndScreen = function() {
-    var endScreen = new rb.GameEnd(rb.LEVEL1, rb.LEVEL2, rb.LEVEL3);
+    var endScreen = new rb.GameEnd(rb.LEVEL1, rb.LEVEL2, rb.LEVEL3, this.eventTarget);
 
     if(rb.Mode.DEBUG)
     rb.director.replaceScene(endScreen);
     else
     rb.director.replaceScene(endScreen, lime.transitions.SlideInRight);
 
-    goog.events.listenOnce(this.eventTarget, 'play again', function(e){
-      console.log('play again')
+    goog.events.listenOnce(this.eventTarget, 'start again', function(e){
+        this.loadLevel();
     }, false, this);
+
+    goog.events.listenOnce(this.eventTarget, 'scores', function(e){
+        this.showScoreEndScreen();
+    }, false, this);    
 }
 
 /**
@@ -302,9 +288,16 @@ rb.GameManager.prototype.showLevelEnd = function() {
         goog.events.listenOnce(this.eventTarget, 'continue', function(e) {
            
             if(rb.GAME.currentLevel < rb.GAME.LEVELS)        
-            rb.GAME.currentLevel = rb.GAME.currentLevel + 1;
+            {
+                rb.GAME.currentLevel = rb.GAME.currentLevel + 1;
+                this.loadLevel(rb.GAME.currentLevel);
+            }    
+            else
+            {
+                rb.GAME.currentLevel = 1;
+                this.showScoreEndScreen();
+            }    
 
-            this.loadLevel(rb.GAME.currentLevel);
         }, false, this);
     }
 }

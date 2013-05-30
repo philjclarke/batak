@@ -19,10 +19,6 @@ rb.GameEndScore = function(level1, level2, level3, eventTarget) {
         layer.appendChild(background);
     }  
 
-    var background = new lime.Sprite().setSize(rb.WIDTH,rb.HEIGHT).
-        setFill('#eeeeee').setAnchorPoint(0,0);
-    layer.appendChild(background);
-
     var headerBackground = new lime.Sprite().setFill('assets/header.png').setAnchorPoint(0, 0).setPosition(0, 0);
     layer.appendChild(headerBackground, 1);
 
@@ -45,8 +41,8 @@ rb.GameEndScore = function(level1, level2, level3, eventTarget) {
     var scoreWindow = new lime.Layer().setPosition(30, 300);
     var reactionTimeWindow = new lime.Layer().setPosition(30, 300);
 
-    var thumbSpacer = 100;
-    var levelTextSpacer = 125;
+    var thumbSpacer = 175;
+    var levelTextSpacer = 135;
 
     var levelTextColumn = new lime.Layer().setPosition(0, 0);
     var levelThumbColumn = new lime.Layer().setPosition(levelTextSpacer + scoreRect.width + (thumbSpacer / 2), 0);
@@ -75,15 +71,15 @@ rb.GameEndScore = function(level1, level2, level3, eventTarget) {
     /*************************/
 
     var level1Text = new lime.Label().setText('level 1').setFontFamily(rb.GAME.FONT).setFontSize(h2Size).setAlign('right').setFontColor('#ffffff')
-    .setAnchorPoint(0, 0).setPosition(0 + padding, (h2Size / 2));
+    .setAnchorPoint(0, 0).setPosition(0, (h2Size / 2));
     levelTextColumn.appendChild(level1Text, 10);
 
     var level2Text = new lime.Label().setText('level 2').setFontFamily(rb.GAME.FONT).setFontSize(h2Size).setAlign('right').setFontColor('#ffffff')
-    .setAnchorPoint(0, 0).setPosition(0 + padding, (scoreRect.height + padding) + (h2Size / 2));
+    .setAnchorPoint(0, 0).setPosition(0, (scoreRect.height + padding) + (h2Size / 2));
     levelTextColumn.appendChild(level2Text, 10);
 
     var level3Text = new lime.Label().setText('level 3').setFontFamily(rb.GAME.FONT).setFontSize(h2Size).setAlign('right').setFontColor('#ffffff')
-    .setAnchorPoint(0, 0).setPosition(0 + padding, (scoreRect.height + padding) * 2 + (h2Size / 2));
+    .setAnchorPoint(0, 0).setPosition(0, (scoreRect.height + padding) * 2 + (h2Size / 2));
     levelTextColumn.appendChild(level3Text, 10);
 
     scoreWindow.appendChild(levelTextColumn);
@@ -99,7 +95,7 @@ rb.GameEndScore = function(level1, level2, level3, eventTarget) {
 
     // Your score heading
     var yourScoreHeading = new lime.Label().setText('your results').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(24).
-        setAlign('center').setAnchorPoint(0, 1).setSize(scoreRect.width, 40).setPosition(0, 0);
+        setAlign('center').setAnchorPoint(0.5, 1).setSize(scoreRect.width + padding, 40).setPosition(scoreRect.width / 2, 0);
 
     // Your score background 1
     var yourScoreBackground1 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, 0);
@@ -130,7 +126,7 @@ rb.GameEndScore = function(level1, level2, level3, eventTarget) {
 
     // Top score heading
     var topScoreHeading = new lime.Label().setText('highest results').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(24).
-        setAlign('center').setAnchorPoint(0, 1).setSize(scoreRect.width, 40).setPosition(0, 0);
+        setAlign('center').setAnchorPoint(0.5, 1).setSize(scoreRect.width + padding, 40).setPosition(scoreRect.width / 2, 0);
 
 
     // Top score background 1
@@ -169,7 +165,7 @@ rb.GameEndScore = function(level1, level2, level3, eventTarget) {
     scoreColumn.appendChild(this.scoreText2, 2);
     scoreColumn.appendChild(yourScoreBackground3, 1);
     scoreColumn.appendChild(this.scoreText3, 2);
-    
+
 
     topScoreColumn.appendChild(topScoreHeading);
     topScoreColumn.appendChild(topScoreBackground1, 1);
@@ -189,9 +185,25 @@ rb.GameEndScore = function(level1, level2, level3, eventTarget) {
     this.updateScoreLabel(this.topScoreText2, level2.bestScore);
     this.updateScoreLabel(this.topScoreText3, level3.bestScore);   
 
+    this.appendChild(scoreWindow);
+
     this.reactionTimesButton = new rb.TileButton.type("reaction times", eventTarget, rb.NAV.RESTART_UP, rb.NAV.RESTART_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH * 0.5, rb.HEIGHT * 0.85);
     layer.appendChild(this.reactionTimesButton);
+
+    this.topScoreText1.setFontColor(level1.TEXT_HIGHLIGHT_COLOR);
+    this.topScoreText2.setFontColor(level2.TEXT_HIGHLIGHT_COLOR);
+    this.topScoreText3.setFontColor(level3.TEXT_HIGHLIGHT_COLOR);
+
+    if(level1.score >= level1.bestScore)
+        this.scoreText1.setFontColor(level1.TEXT_HIGHLIGHT_COLOR);
+
+    if(level2.score >= level2.bestScore)
+        this.scoreText2.setFontColor(level2.TEXT_HIGHLIGHT_COLOR);
+
+    if(level3.score >= level3.bestScore)
+        this.scoreText3.setFontColor(level3.TEXT_HIGHLIGHT_COLOR);
 };
+
 
 goog.inherits(rb.GameEndScore, lime.Scene);
 

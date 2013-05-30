@@ -48,13 +48,13 @@ rb.TileCountDown = function(level, eventTarget) {
 
     this.appendChild(this.buttonImage, this.getNumberOfChildren() - 1);
 
-    this.lbl = new lime.Label().setText('ready').setFontFamily(rb.GAME.FONT).setFontColor('#1e1e1e').setFontWeight(500).setFontSize(48).
+    this.lbl = new lime.Label().setText('ready').setFontFamily(rb.GAME.FONT).setFontColor('#1e1e1e').setFontSize(36).
         setAlign('center');
 
     if(rb.Mode.DEBUG)
     this.lbl.setStroke(new lime.fill.Stroke(1, '#ffffff'));
 
-    this.lbl.setSize(100, 60)
+    this.lbl.setSize(100, 45);
 
     this.appendChild(this.lbl, this.getNumberOfChildren() - 1);
 
@@ -161,6 +161,8 @@ rb.TileCountDown.prototype.animate = function(sprite, time, type) {
  */
 rb.TileCountDown.prototype.updateCounter = function(s) {
 
+    this.lbl.setFontSize(48);
+    this.lbl.setSize(100, 60);
     this.lbl.setText(this.countDownArray[this.countDownIndex]);
     
     this.buttonAnimationImage.setHidden(false);

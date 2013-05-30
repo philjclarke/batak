@@ -197,17 +197,15 @@ rb.LevelEnd = function(levelNumber, level, eventTarget) {
 
     this.appendChild(layer);
 
-
     this.updateScoreLabel(level.score);
     this.updateHighestScoreLabel(level.bestScore);   
     this.updateYourARTLabel(level.art);
     this.updateBestARTLabel(level.bestART);
 
-
     if(level.score >= level.bestScore)
         this.scoreText.setFontColor(level.TEXT_HIGHLIGHT_COLOR);
 
-    if(level.art >= level.bestART)
+    if(level.art <= level.bestART)
     {
         this.yourARTText.setFontColor(level.TEXT_HIGHLIGHT_COLOR); 
         this.msText1.setFontColor(level.TEXT_HIGHLIGHT_COLOR); 
