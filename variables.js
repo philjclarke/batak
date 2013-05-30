@@ -75,7 +75,7 @@ rb.LEVEL3 = {
     art: 0,
     bestART: null,    
     TILES: 12,
-    TIME: 20,
+    TIME: 30,
     INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     MAX_SUBTRACTION: 50,
     OPERATORS: ["+", "x", "-"],

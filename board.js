@@ -233,21 +233,14 @@ rb.Board.prototype.selectRandomNode = function(visible)
 {
     var randomNumber = Math.floor(Math.random() * 12);
 
-    if(randomNumber != this.selectedNode)
-    {
-        if(this.selectedNode != null)
-        this.nodeTargets[this.selectedNode].deselect();
+    if(this.selectedNode != null)
+    this.nodeTargets[this.selectedNode].deselect();
 
-        this.nodeTargets[randomNumber].select(visible);
+    this.selectedNode = randomNumber;
 
-        this.selectedNode = randomNumber;
+    this.nodeTargets[randomNumber].select(visible);
 
-        return this.nodeTargets[randomNumber];
-    }
-    else
-    {
-        this.selectRandomNode(visible);
-    } 
+    return this.nodeTargets[randomNumber];
 }
 
 rb.Board.prototype.resetBoard = function(e)

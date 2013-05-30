@@ -28,14 +28,14 @@ rb.GameManager = function() {
 
     if(rb.Mode.DEBUG)
     {   
-        // rb.GAME.currentLevel = 3;
-        // this.loadLevel();
+        // rb.GAME.currentLevel = 2;
+        // this.showLevelEnd();
 
         this.showSplash();
     }
     else
     {
-        // rb.GAME.currentLevel = 3;
+        // rb.GAME.currentLevel = 2;
         // this.showLevelEnd();
 
         // this.showEndScreen();
