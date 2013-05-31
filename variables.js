@@ -6,18 +6,27 @@ rb.Mode = {
     BACKGROUND_COLOR: '#aaaaaa' 
 };    
 
+/*
+ INTRO_TEXT: '<p>Have a go at our reaction test and see if you can<br/>get the highest score!</p><p>Each level gives you more to think about.<br/>Can you improve your results over time?<br/>Practice makes perfect!</p>',
+*/
+
 rb.GAME = {
-    INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-    FONT: 'FrutigerNeue1450W01-Reg',  
-    FONT_NUMBERS: 'arial, sans-serif',  
-    HEADER_HEIGHT: 95,     
-    HighScore: "010",   
-    LEVELS: 3,  
+    INTRO_TEXT: 'Have a go at our reaction test and see if you can get the highest score!. Each level gives you more to think about. Can you improve your results over time?',
+    SIS_LOGO: 'assets/sis-reaction-test-logo.png',
+    FONT: 'FrutigerNeue1450W01-Reg',
+    FONT_NUMBERS: 'arial, sans-serif',
+    HEADER_HEIGHT: 95,    
+    BUTTON_Y: 810,
+    HighScore: '010',  
+    LEVELS: 3,
+    localStorageStatus: false,   
+    localStorage: null, 
+    LOCAL_STORAGE_ID: 'reactionTestScores_00001',
     currentLevel: 1
 };
 
 rb.RESULTS = {
-    INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+    INTRO_TEXT: ''
 };
 
 rb.NAV = {
@@ -27,14 +36,23 @@ rb.NAV = {
     RESTART_DOWN: 'assets/restart-grey-animation.png' 
 }
 
+rb.SCORES = {
+    level1BestScore: 0,
+    level1BestART: 0,
+    level2BestScore: 0,
+    level2BestART: 0,
+    level3BestScore: 0,
+    level3BestART: 0     
+};
+
 rb.LEVEL1 = {
     score: 0,
     bestScore: 0,
     art: 0,
     bestART: null,
     TILES: 12,
-    INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    TIME: 10,
+    INTRO_TEXT: 'Hit the buttons as quickly as possible as they light up.',
+    TIME: 30,
     LEVEL_IMAGE: 'assets/level_1_diagram.png',
     LEVEL_THUMB: 'assets/icon_green_black_bg.png',
     TILE_UP: 'assets/node-green.png',    
@@ -54,8 +72,8 @@ rb.LEVEL2 = {
     art: 0,
     bestART: null,
     TILES: 12,
-    INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    TIME: 20,
+    INTRO_TEXT: 'Follow the instructions and hit the right number as quickly as you can. Do you know your odds and evens?',
+    TIME: 30,
     LEVEL_IMAGE: 'assets/level_2_diagram.png',
     LEVEL_THUMB: 'assets/icon_orange_black_bg.png',
     TILE_UP: 'assets/node-orange-stroke.png',    
@@ -76,7 +94,7 @@ rb.LEVEL3 = {
     bestART: null,    
     TILES: 12,
     TIME: 30,
-    INTRO_TEXT: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    INTRO_TEXT: 'Follow the instructions and hit the right number as quickly as you can. How’s your maths?',
     MAX_SUBTRACTION: 50,
     OPERATORS: ["+", "x", "-"],
     LEVEL_IMAGE: 'assets/level_3_diagram.png',

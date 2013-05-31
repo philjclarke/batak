@@ -26,23 +26,62 @@ rb.GameManager = function() {
 
     this.eventTarget = new goog.events.EventTarget();
 
+    rb.GAME.localStorageStatus = this.checkLocalStorageSupport();
+    
+
+    if(rb.GAME.localStorageStatus)
+    {
+        rb.GAME.localStorage = window['localStorage'];
+    }   
+
+    if(rb.GAME.localStorageStatus)
+    {
+        if(localStorage.getItem(rb.GAME.LOCAL_STORAGE_ID) !== null)
+        {
+            rb.SCORES = JSON.parse(rb.GAME.localStorage.getItem(rb.GAME.LOCAL_STORAGE_ID));
+
+            rb.LEVEL1.bestScore = rb.SCORES.level1BestScore;
+            rb.LEVEL1.bestART = rb.SCORES.level1BestART;
+
+            rb.LEVEL2.bestScore = rb.SCORES.level2BestScore;
+            rb.LEVEL2.bestART = rb.SCORES.level2BestART;
+
+            rb.LEVEL3.bestScore = rb.SCORES.level3BestScore;
+            rb.LEVEL3.bestART = rb.SCORES.level3BestART;              
+        }
+    }
+
     if(rb.Mode.DEBUG)
     {   
         // rb.GAME.currentLevel = 2;
         // this.showLevelEnd();
-
         this.showSplash();
+        // this.loadLevel();
+
+        // this.showEndScreen();
     }
     else
     {
         // rb.GAME.currentLevel = 2;
         // this.showLevelEnd();
+        this.showSplash();
+        // this.loadLevel();
 
         // this.showEndScreen();
-
-        this.showSplash();
     }       
 };
+
+/**
+ * Check support for localStorage
+ */ 
+rb.GameManager.prototype.checkLocalStorageSupport = function() {
+
+  try {
+    return 'localStorage' in window && window['localStorage'] !== null;
+  } catch(e){
+    return false;
+  }
+}
 
 /**
  * Shows scientists in sport splash screen
@@ -124,7 +163,7 @@ rb.GameManager.prototype.showStartScreen = function() {
         setAlign('left').setAnchorPoint(0, 0).setSize(650, 250).setPosition(30, 565);
     layer.appendChild(introText);
 
-    var startButton = new rb.TileButton.type("start", this.eventTarget, rb.NAV.START_CONTINUE_UP, rb.NAV.START_CONTINUE_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT * 0.85);
+    var startButton = new rb.TileButton.type("start", this.eventTarget, rb.NAV.START_CONTINUE_UP, rb.NAV.START_CONTINUE_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.GAME.BUTTON_Y);
 
     layer.appendChild(startButton);
 

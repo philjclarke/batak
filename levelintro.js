@@ -26,9 +26,12 @@ rb.LevelIntro = function(level, introText, levelImage, levelThumb, highestScore,
         setAlign('left').setAnchorPoint(0, 0.5).setPosition(500, rb.GAME.HEADER_HEIGHT / 2);
     layer.appendChild(levelHeading, 3);
 
+    // Scientists in sport logo 
+    var sisLogo = new lime.Sprite().setFill(rb.GAME.SIS_LOGO).setSize(220, 57).setAnchorPoint(0, 0.5).setPosition(0 + padding, rb.GAME.HEADER_HEIGHT / 2);
+    layer.appendChild(sisLogo, 5);
 
     // Game thumb
-    var gameThumb = new lime.Sprite().setFill(levelThumb).setSize(76, 76).setAnchorPoint(1, 0.5).setPosition(500 - padding, rb.GAME.HEADER_HEIGHT / 2);
+    var gameThumb = new lime.Sprite().setFill(levelThumb).setSize(50, 50).setAnchorPoint(1, 0.5).setPosition(500 - padding, rb.GAME.HEADER_HEIGHT / 2);
     layer.appendChild(gameThumb, 4);
 
 
@@ -45,7 +48,7 @@ rb.LevelIntro = function(level, introText, levelImage, levelThumb, highestScore,
 
     layer.appendChild(level1Text, 5);
 
-    this.playButton = new rb.TileButton.type("play", eventTarget, rb.NAV.START_CONTINUE_UP, rb.NAV.START_CONTINUE_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.HEIGHT * 0.85);
+    this.playButton = new rb.TileButton.type("play", eventTarget, rb.NAV.START_CONTINUE_UP, rb.NAV.START_CONTINUE_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH / 2, rb.GAME.BUTTON_Y);
 
     layer.appendChild(this.playButton, 6);
     

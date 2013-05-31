@@ -50,10 +50,14 @@ rb.GameEndScore = function(level1, level2, level3, eventTarget) {
     var scoreColumn = new lime.Layer().setPosition(levelTextSpacer, 0);
     var topScoreColumn = new lime.Layer().setPosition(levelTextSpacer + thumbSpacer + scoreRect.width, 0);
 
+    var backgroundYourScore = '#615952';
+
     var headerBackground = new lime.Sprite().setFill('assets/header.png').setAnchorPoint(0, 0).setPosition(0, 0);
     layer.appendChild(headerBackground, 10);
 
-    console.log(level1.LEVEL_THUMB)
+    // Scientists in sport logo 
+    var sisLogo = new lime.Sprite().setFill(rb.GAME.SIS_LOGO).setSize(220, 57).setAnchorPoint(0, 0.5).setPosition(0 + padding, rb.GAME.HEADER_HEIGHT / 2);
+    layer.appendChild(sisLogo, 5);    
 
     /*************************/
 
@@ -61,7 +65,7 @@ rb.GameEndScore = function(level1, level2, level3, eventTarget) {
     levelThumbColumn.appendChild(levelScore1Thumb, 10);
 
     var levelScore2Thumb = new lime.Sprite().setFill(level2.LEVEL_THUMB).setAnchorPoint(0.5, 0).setPosition(0, (artRect.height + padding));
-    levelThumbColumn.appendChild(levelScore1Thumb, 11);
+    levelThumbColumn.appendChild(levelScore2Thumb, 11);
 
     var levelScore3Thumb = new lime.Sprite().setFill(level3.LEVEL_THUMB).setAnchorPoint(0.5, 0).setPosition(0, (artRect.height + padding) * 2);
     levelThumbColumn.appendChild(levelScore3Thumb, 12);
@@ -98,7 +102,7 @@ rb.GameEndScore = function(level1, level2, level3, eventTarget) {
         setAlign('center').setAnchorPoint(0.5, 1).setSize(scoreRect.width + padding, 40).setPosition(scoreRect.width / 2, 0);
 
     // Your score background 1
-    var yourScoreBackground1 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, 0);
+    var yourScoreBackground1 = new lime.Sprite().setFill(backgroundYourScore).setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, 0);
 
 
     // Score 1
@@ -107,7 +111,7 @@ rb.GameEndScore = function(level1, level2, level3, eventTarget) {
     
 
     // Your score background 2
-    var yourScoreBackground2 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, scoreRect.height + padding);
+    var yourScoreBackground2 = new lime.Sprite().setFill(backgroundYourScore).setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, scoreRect.height + padding);
 
 
     // Score 2
@@ -116,7 +120,7 @@ rb.GameEndScore = function(level1, level2, level3, eventTarget) {
 
 
     // Your score background 3
-    var yourScoreBackground3 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, (scoreRect.height + padding) * 2 );
+    var yourScoreBackground3 = new lime.Sprite().setFill(backgroundYourScore).setAnchorPoint(0, 0).setSize(scoreRect.width, scoreRect.height).setPosition(0, (scoreRect.height + padding) * 2 );
 
 
     // Score 3

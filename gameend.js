@@ -53,10 +53,14 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
     var artColumn = new lime.Layer().setPosition(levelTextSpacer, 0);
     var topARTColumn = new lime.Layer().setPosition(levelTextSpacer + thumbSpacer + artRect.width, 0);
 
+    var backgroundYourScore = '#615952';
+    
     var headerBackground = new lime.Sprite().setFill('assets/header.png').setAnchorPoint(0, 0).setPosition(0, 0);
     layer.appendChild(headerBackground, 10);
 
-    console.log(level1.LEVEL_THUMB)
+    // Scientists in sport logo 
+    var sisLogo = new lime.Sprite().setFill(rb.GAME.SIS_LOGO).setSize(220, 57).setAnchorPoint(0, 0.5).setPosition(0 + padding, rb.GAME.HEADER_HEIGHT / 2);
+    layer.appendChild(sisLogo, 5);
 
     /*************************/
 
@@ -103,7 +107,7 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
         setAlign('left').setAnchorPoint(0.5, 1).setSize(artRect.width, 40).setPosition(artRect.width / 2, 0);
 
     // Your score background 1
-    var yourARTBackground1 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, 0);
+    var yourARTBackground1 = new lime.Sprite().setFill(backgroundYourScore).setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, 0);
 
 
     // ART 1
@@ -112,7 +116,7 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
     
 
     // Your ART background 2
-    var yourARTBackground2 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, artRect.height + padding);
+    var yourARTBackground2 = new lime.Sprite().setFill(backgroundYourScore).setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, artRect.height + padding);
 
 
     // ART 2
@@ -121,7 +125,7 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
 
 
     // Your ART background 3
-    var yourARTBackground3 = new lime.Sprite().setFill('#333333').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, (artRect.height + padding) * 2 );
+    var yourARTBackground3 = new lime.Sprite().setFill(backgroundYourScore).setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, (artRect.height + padding) * 2 );
 
 
     // ART 3
@@ -231,10 +235,10 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
     if(level3.art <= level3.bestART)
         this.artText3.setFontColor(level3.TEXT_HIGHLIGHT_COLOR)
 
-    this.restartButton = new rb.TileButton.type("scores", eventTarget, rb.NAV.RESTART_UP, rb.NAV.RESTART_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH * 0.25, 790);
+    this.restartButton = new rb.TileButton.type("scores", eventTarget, rb.NAV.RESTART_UP, rb.NAV.RESTART_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH * 0.25, rb.GAME.BUTTON_Y);
     layer.appendChild(this.restartButton, 8);
 
-    this.playButton = new rb.TileButton.type("start again", eventTarget, rb.NAV.START_CONTINUE_UP, rb.NAV.START_CONTINUE_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH * 0.75, 790);
+    this.playButton = new rb.TileButton.type("start again", eventTarget, rb.NAV.START_CONTINUE_UP, rb.NAV.START_CONTINUE_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH * 0.75, rb.GAME.BUTTON_Y);
     layer.appendChild(this.playButton, 7);
 };
 
