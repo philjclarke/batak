@@ -53,6 +53,11 @@ rb.Level1.prototype.updateLevelScores = function(level)
     level.score = this.points;
     level.art = this.calculateAverageResponseTime();
 
+    if(level.art >= level.TIME)
+    {
+        level.art = level.TIME;
+    }   
+
     if(parseInt(this.points) > parseInt(level.bestScore))
     level.bestScore = this.points;
 
