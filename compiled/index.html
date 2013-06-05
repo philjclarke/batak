@@ -3,8 +3,9 @@
 <html manifest="batak_adv.manifest">
 <head>
   <title>Reaction Test</title>
+
   <script type="text/javascript">
-    document.write('<link rel="apple-touch-startup-image" href="assets/startup'+(navigator.platform=='iPad'?'-ipad':'')+'.jpg">');
+    /* document.write('<link rel="apple-touch-startup-image" href="assets/startup'+(navigator.platform=='iPad'?'-ipad':'')+'.jpg">'); */
   </script>
 
   <link rel="apple-touch-icon" href="assets/touch-icon-iphone-precomposed.png" />
@@ -20,6 +21,7 @@
   </style>
 </head>
 <body>
+
   <script type="text/javascript">
     (function(name, firstFunc){
 
@@ -50,8 +52,7 @@
 
       var webappCache = window.applicationCache;
 
-      if(webappCache && window.navigator.userAgent.indexOf('WebKit') != -1){
-
+      if(webappCache && window.navigator.userAgent.indexOf('WebKitTEMP') != -1){
         var WIDTH = 200, HEIGHT = 100;
 
         var scripts = document.getElementsByTagName('script');
@@ -128,7 +129,7 @@
     </script>
 
     <!-- fonts.com -->
-	<script type="text/javascript" src="http://fast.fonts.com/jsapi/4c66644a-bf83-48df-a33f-10b17fc76bcd.js"></script>
+    <script type="text/javascript" src="http://fast.fonts.com/jsapi/4c66644a-bf83-48df-a33f-10b17fc76bcd.js"></script>
 </body>
 
 </html>

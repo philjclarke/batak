@@ -11,7 +11,7 @@ rb.Mode = {
 */
 
 rb.GAME = {
-    INTRO_TEXT: 'Have a go at our reaction test and see if you can get the highest score!. Each level gives you more to think about. Can you improve your results over time?',
+    INTRO_TEXT: 'Have a go at our reaction test and see if you can get the highest score! Each level gives you more to think about. Can you improve your results over time?',
     SIS_LOGO: 'assets/sis-reaction-test-logo.png',
     FONT: 'FrutigerNeue1450W01-Reg',
     FONT_NUMBERS: 'arial, sans-serif',
@@ -21,7 +21,7 @@ rb.GAME = {
     LEVELS: 3,
     localStorageStatus: false,   
     localStorage: null, 
-    LOCAL_STORAGE_ID: 'reactionTestScores_00001',
+    LOCAL_STORAGE_ID: 'reactionTestScores_00005',
     currentLevel: 1
 };
 
@@ -38,11 +38,11 @@ rb.NAV = {
 
 rb.SCORES = {
     level1BestScore: 0,
-    level1BestART: 0,
+    level1BestART: null,
     level2BestScore: 0,
-    level2BestART: 0,
+    level2BestART: null,
     level3BestScore: 0,
-    level3BestART: 0     
+    level3BestART: null     
 };
 
 rb.LEVEL1 = {
@@ -94,7 +94,7 @@ rb.LEVEL3 = {
     bestART: null,    
     TILES: 12,
     TIME: 30,
-    INTRO_TEXT: 'Follow the instructions and hit the right number as quickly as you can. How’s your maths?',
+    INTRO_TEXT: 'Follow the instructions and hit the right number as quickly as you can. How\'s your maths?',
     MAX_SUBTRACTION: 50,
     OPERATORS: ["+", "x", "-"],
     LEVEL_IMAGE: 'assets/level_3_diagram.png',
@@ -107,5 +107,7 @@ rb.LEVEL3 = {
     TILE_COUNTDOWN_DOWN: 'assets/node-blue-interaction-whole.png',      
     LINE_COLOR: '#006699',
     TEXT_COLOR: '#333333',
-    TEXT_HIGHLIGHT_COLOR: '#006699'  
+    TEXT_HIGHLIGHT_COLOR: '#0095e0'  
 };
+
+// 006699

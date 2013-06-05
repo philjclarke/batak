@@ -41,6 +41,11 @@ rb.Level1.prototype.startGame = function()
         }, false, this);    
 }
 
+rb.Level1.prototype.hideWindow = function(level)
+{
+    console.log('onbluronblur')
+}
+
 rb.Level1.prototype.updateLevelScores = function(level)
 {
     console.log('this.calculateAverageResponseTime()', this.calculateAverageResponseTime());
@@ -53,7 +58,7 @@ rb.Level1.prototype.updateLevelScores = function(level)
 
     if(level.bestART == null)
     level.bestART = level.art;
-    else if(parseInt(level.art) < parseInt(level.bestART))
+    else if(parseFloat(level.art) < parseFloat(level.bestART))
     level.bestART = level.art;
 }
 

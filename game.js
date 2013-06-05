@@ -124,10 +124,32 @@ rb.Game = function(level, eventTarget) {
     layer.appendChild(timeHeading, 10);
 
     layer.appendChild(this.board);
+
+    this.onBlurTime = null;
 };
 
 goog.inherits(rb.Game, lime.Scene);
 
+
+/**
+ * Adds window blur and focus event listeners. Prevents inaccuracies in response time
+ */
+rb.Game.prototype.addFocusBlurListeners = function() {
+
+    if(goog.events.hasListener(window, goog.events.EventType.FOCUS) == false)
+    {
+        goog.events.listenOnce(window, goog.events.EventType.FOCUS, function(e){
+            this.start = this.start - this.onBlurTime;
+        }, false, this);       
+    }    
+
+    if(goog.events.hasListener(window, goog.events.EventType.BLUR) == false)
+    {
+        goog.events.listenOnce(window, goog.events.EventType.BLUR, function(e){
+            this.onBlurTime = Date.now();
+        }, false, this); 
+    }
+};
 
 /**
  * Show game-over dialog
@@ -232,7 +254,7 @@ rb.Game.prototype.updateScore = function() {
         else if(this.points >= 10)
         {
             currentScore = "0" + this.points;
-        }   
+        }
 
         this.scoreText.setText(currentScore);
     }

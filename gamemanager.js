@@ -25,6 +25,7 @@ goog.require('rb.Variables');
 rb.GameManager = function() {
 
     this.eventTarget = new goog.events.EventTarget();
+    this.currentScreen = null;
 
     rb.GAME.localStorageStatus = this.checkLocalStorageSupport();
     
@@ -47,7 +48,14 @@ rb.GameManager = function() {
             rb.LEVEL2.bestART = rb.SCORES.level2BestART;
 
             rb.LEVEL3.bestScore = rb.SCORES.level3BestScore;
-            rb.LEVEL3.bestART = rb.SCORES.level3BestART;              
+            rb.LEVEL3.bestART = rb.SCORES.level3BestART;     
+
+            console.log(rb.LEVEL1.bestScore); 
+            console.log(rb.LEVEL1.bestART);      
+            console.log(rb.LEVEL2.bestScore); 
+            console.log(rb.LEVEL2.bestART);   
+            console.log(rb.LEVEL3.bestScore); 
+            console.log(rb.LEVEL3.bestART);                              
         }
     }
 
@@ -55,19 +63,32 @@ rb.GameManager = function() {
     {   
         // rb.GAME.currentLevel = 2;
         // this.showLevelEnd();
-        this.showSplash();
+        // this.showSplash();
+
+        // rb.GAME.currentLevel = 2;
         // this.loadLevel();
 
         // this.showEndScreen();
+
+        this.showSplash();
+
+        // this.showLevelEnd();        
     }
     else
     {
         // rb.GAME.currentLevel = 2;
         // this.showLevelEnd();
-        this.showSplash();
+        // this.showSplash();
         // this.loadLevel();
 
         // this.showEndScreen();
+
+        // rb.GAME.currentLevel = 2;
+        // this.loadLevel();      
+
+        // this.showLevelEnd();
+
+        this.showSplash();
     }       
 };
 
@@ -87,6 +108,9 @@ rb.GameManager.prototype.checkLocalStorageSupport = function() {
  * Shows scientists in sport splash screen
  */
 rb.GameManager.prototype.showSplash = function() {
+
+    this.currentScreen = 'showSplash';
+
     var scene = new lime.Scene(),
         layer = new lime.Layer().setPosition(0, 0);
     
@@ -112,6 +136,9 @@ rb.GameManager.prototype.showSplash = function() {
  * Shows gsk splash screen
  */
 rb.GameManager.prototype.showSplash1 = function() {
+
+    this.currentScreen = 'showSplash1';
+
     var scene = new lime.Scene(),
         layer = new lime.Layer().setPosition(0, 0);
     
@@ -140,6 +167,9 @@ rb.GameManager.prototype.showSplash1 = function() {
  * Shows start screen
  */
 rb.GameManager.prototype.showStartScreen = function() {
+
+    this.currentScreen = 'showStartScreen';
+
     var startScene = new lime.Scene(),
         layer = new lime.Layer().setPosition(0, 0); 
 
@@ -185,24 +215,33 @@ rb.GameManager.prototype.showStartScreen = function() {
  */
 rb.GameManager.prototype.showScoreEndScreen = function() {
 
-    console.log('showScoreEndScreen');
     var endScoresScreen = new rb.GameEndScore(rb.LEVEL1, rb.LEVEL2, rb.LEVEL3, this.eventTarget);
 
-
     if(rb.Mode.DEBUG)
-    rb.director.replaceScene(endScoresScreen);
+    {
+        rb.director.replaceScene(endScoresScreen);
+    }    
+    else if(this.currentScreen == 'showEndScreen')
+    {
+        rb.director.replaceScene(endScoresScreen, lime.transitions.SlideInLeft);
+    }    
     else
-    rb.director.replaceScene(endScoresScreen, lime.transitions.SlideInRight);
+    {
+        rb.director.replaceScene(endScoresScreen, lime.transitions.SlideInRight);
+    }
 
     goog.events.listenOnce(this.eventTarget, 'reaction times', function(e){
         this.showEndScreen();
     }, false, this);
+
+    this.currentScreen = 'showScoreEndScreen';
 }
 
 /**
  * Shows end screen
  */
 rb.GameManager.prototype.showEndScreen = function() {
+
     var endScreen = new rb.GameEnd(rb.LEVEL1, rb.LEVEL2, rb.LEVEL3, this.eventTarget);
 
     if(rb.Mode.DEBUG)
@@ -216,13 +255,18 @@ rb.GameManager.prototype.showEndScreen = function() {
 
     goog.events.listenOnce(this.eventTarget, 'scores', function(e){
         this.showScoreEndScreen();
-    }, false, this);    
+    }, false, this); 
+
+    this.currentScreen = 'showEndScreen';   
 }
 
 /**
  * Loads level
  */
 rb.GameManager.prototype.loadLevel = function() {
+
+    this.currentScreen = 'loadLevel';
+
     var level;
 
     switch(rb.GAME.currentLevel)
@@ -255,6 +299,7 @@ rb.GameManager.prototype.loadLevel = function() {
  * Loads game
  */
 rb.GameManager.prototype.loadGame = function() {
+
     var scene;
 
     switch(rb.GAME.currentLevel)
@@ -274,7 +319,20 @@ rb.GameManager.prototype.loadGame = function() {
 
     scene.setPosition(0, 0);
 
-    var transition = rb.director.replaceScene(scene, lime.transitions.SlideInRight);
+    var transition;
+
+    if(rb.Mode.DEBUG)
+    {
+        rb.director.replaceScene(endScoresScreen);
+    }    
+    else if(this.currentScreen == 'showLevelEnd')
+    {
+        transition = rb.director.replaceScene(scene, lime.transitions.SlideInLeft);
+    }    
+    else
+    {
+        transition = rb.director.replaceScene(scene, lime.transitions.SlideInRight);
+    }
 
     goog.events.listenOnce(transition,'end', function() {
 
@@ -285,6 +343,8 @@ rb.GameManager.prototype.loadGame = function() {
 
         this.showLevelEnd();
     }, false, this);
+
+    this.currentScreen = 'loadGame';
 }
 
 
@@ -292,6 +352,7 @@ rb.GameManager.prototype.loadGame = function() {
  * Shows end of level screen
  */
 rb.GameManager.prototype.showLevelEnd = function() {
+
     var level;
 
     switch(rb.GAME.currentLevel)
@@ -339,95 +400,13 @@ rb.GameManager.prototype.showLevelEnd = function() {
 
         }, false, this);
     }
+
+    this.currentScreen = 'showLevelEnd';
 }
-
-/*
-    level, score, highestScore, yourART, bestART, eventTarget
-
-    this.updateScoreLabel(score);
-    this.updateHighestScoreLabel(highestScore);
-    this.updateYourARTLabel(yourART);
-    this.updateBestARTLabel(bestART);
-*/
-
-// load menu scene
-rb.loadMenu = function() {
-    var scene = new lime.Scene(),
-        layer = new lime.Layer().setPosition(rb.WIDTH / 2, 0);
-
-    if(rb.isBrokenChrome()) layer.setRenderer(lime.Renderer.CANVAS);
-
-    var btns = new lime.Layer().setPosition(0, 430);
-    layer.appendChild(btns);
-    var move = new lime.animation.MoveBy(-rb.WIDTH, 0).enableOptimizations();
-
-    btn = rb.makeButton('Start').setPosition(0, 320);
-    goog.events.listen(btn, 'click', function() {
-        // rb.usemode = rb.Mode.TIMED;
-        // btns.runAction(move);
-
-        rb.newgame(rb.Level1);
-    });
-    btns.appendChild(btn);
-
-    /*
-    btn = rb.makeButton('Help').setPosition(0, 440);
-    goog.events.listen(btn, 'click', function() {
-        rb.loadHelpScene();
-    });
-    btns.appendChild(btn);
-    */
-
-    //second area that will slide in
-    var btns2 = new lime.Layer().setPosition(rb.WIDTH, 0);
-    btns.appendChild(btns2);
-
-    var lbl = new lime.Label().setText('Select board size:').setFontColor('#fff').setFontSize(24).setPosition(0, 140);
-    btns2.appendChild(lbl);
-
-    btn = rb.makeButton('6x6').setPosition(0, 200);
-    goog.events.listen(btn, 'click', function() {
-        rb.newgame(6);
-    });
-    btns2.appendChild(btn);
-
-    btn = rb.makeButton('7x7').setPosition(0, 320);
-    goog.events.listen(btn, 'click', function() {
-        rb.newgame(7);
-    });
-    btns2.appendChild(btn);
-
-    btn = rb.makeButton('8x8').setPosition(0, 440);
-    goog.events.listen(btn, 'click', function() {
-        rb.newgame(8);
-    });
-    btns2.appendChild(btn);
-
-    scene.appendChild(layer);
-    //lime logo
-    rb.builtWithLime(scene);
-
-    // set current scene active
-    rb.director.replaceScene(scene, lime.transitions.SlideInRight);
-};
-
-// helper for same size buttons
-rb.makeButton = function(text) {
-    var btn = new rb.Button(text).setSize(300, 90);
-    return btn;
-};
 
 rb.isBrokenChrome = function(){
    return (/Chrome\/9\.0\.597/).test(goog.userAgent.getUserAgentString());
 }
-
-// load new game scene
-rb.newgame = function(level) {
-
-    var scene = new rb.Level1();
-    scene.setPosition(0, 0)
-    rb.director.replaceScene(scene, lime.transitions.SlideInRight);
-};
 
 rb.GameManager.prototype.getEventTarget = function()
 {

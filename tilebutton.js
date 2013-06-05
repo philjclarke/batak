@@ -105,8 +105,8 @@ rb.TileButton.type = function(type, eventTarget, tileUp, tileDown, tileSelect, t
     }    
     else
     {
-        button.buttonImage.setSize(171, 171);
-        button.backgroundAnimation.setSize(181, 181);
+        button.buttonImage.setSize(181, 181);
+        button.backgroundAnimation.setSize(191, 191);
         button.backgroundAnimation.setScale(1.5);
 
         if(type == "restart level" || type == "start again" || type == "reaction times" )

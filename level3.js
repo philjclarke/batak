@@ -23,7 +23,7 @@ rb.Level3 = function(eventTarget) {
     this.instructionsBackground.setHidden(true);
     this.appendChild(this.instructionsBackground, 3);
 
-    this.instructionsText = new lime.Label().setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(60).
+    this.instructionsText = new lime.Label().setText('').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(60).
     setAnchorPoint(0.5, 0).setPosition(rb.WIDTH / 2, 175).setSize(370, 60);
 
     if(rb.Mode.DEBUG)
@@ -32,9 +32,7 @@ rb.Level3 = function(eventTarget) {
     this.instructionsText.setHidden(true);
     this.appendChild(this.instructionsText);
 
-    this.numbers = this.generateNumbers(0, 0, 50);  
-
-    this.generateQuestion();
+    this.numbers = this.generateNumbers(0, 0, 50);
 };
 
 goog.inherits(rb.Level3, rb.Game);
@@ -44,6 +42,8 @@ rb.Level3.prototype.startGame = function()
     this.board.startCountDown();
 
     goog.events.listenOnce(this.eventTarget, 'countdown finished', function(e){
+
+            this.generateQuestion();
 
             this.start = Date.now();
 
@@ -74,7 +74,7 @@ rb.Level3.prototype.updateLevelScores = function(level)
 
     if(level.bestART == null)
     level.bestART = level.art;
-    else if(parseInt(level.art) < parseInt(level.bestART))
+    else if(parseFloat(level.art) < parseFloat(level.bestART))
     level.bestART = level.art;
 }
 

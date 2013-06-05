@@ -10,7 +10,7 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
 
     var layer = new lime.Layer().setPosition(0, 0);
     var padding = 16;
-    var backgroundPadding = 5;
+    var backgroundPadding = 15;
 
     if(rb.Mode.BACKGROUND_DEBUG)
     {
@@ -111,17 +111,16 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
 
 
     // ART 1
-    this.artText1 = new lime.Label().setText('00.0').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(80).
-        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 + backgroundPadding, 0 - backgroundPadding);
-    
+    this.artText1 = new lime.Label().setText('00.0').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(72).
+        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 + backgroundPadding, 0);
 
     // Your ART background 2
     var yourARTBackground2 = new lime.Sprite().setFill(backgroundYourScore).setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0, artRect.height + padding);
 
 
     // ART 2
-    this.artText2 = new lime.Label().setText('00.0').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(80).
-        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 + backgroundPadding, artRect.height + padding - backgroundPadding);
+    this.artText2 = new lime.Label().setText('00.0').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(72).
+        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 + backgroundPadding, artRect.height + padding);
 
 
     // Your ART background 3
@@ -129,8 +128,8 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
 
 
     // ART 3
-    this.artText3 = new lime.Label().setText('00.0').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(80).
-        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 + backgroundPadding, (artRect.height + padding) * 2 - backgroundPadding);
+    this.artText3 = new lime.Label().setText('00.0').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(72).
+        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 + backgroundPadding, (artRect.height + padding) * 2);
 
 
     // Top ART heading
@@ -143,8 +142,8 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
 
 
     // ART 1
-    this.topARTText1 = new lime.Label().setText('00.0').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(80).
-        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 + backgroundPadding, 0 - backgroundPadding);
+    this.topARTText1 = new lime.Label().setText('00.0').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(72).
+        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 + backgroundPadding, 0);
   
 
     // Top ART background 2
@@ -152,8 +151,8 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
 
 
     // ART 2
-    this.topARTText2 = new lime.Label().setText('00.0').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(80).
-        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 + backgroundPadding, artRect.height + padding - backgroundPadding);
+    this.topARTText2 = new lime.Label().setText('00.0').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(72).
+        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 + backgroundPadding, artRect.height + padding);
     
 
     // Top ART background 3
@@ -161,26 +160,26 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
 
 
     // ART 3
-    this.topARTText3 = new lime.Label().setText('00.0').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(80).
-        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 + backgroundPadding, (artRect.height + padding) * 2 - backgroundPadding);
+    this.topARTText3 = new lime.Label().setText('00.0').setFontFamily(rb.GAME.FONT_NUMBERS).setFontColor('#ffffff').setFontSize(72).
+        setAlign('left').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 + backgroundPadding, (artRect.height + padding) * 2);
 
-    var msText1 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding, 0 - backgroundPadding);
+    var msText1 = new lime.Label().setText('s').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(72).
+        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding, 0);
 
-    var msText2 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding, (artRect.height + padding) - backgroundPadding);
+    var msText2 = new lime.Label().setText('s').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(72).
+        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding, (artRect.height + padding));
 
-    var msText3 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding, (artRect.height + padding) * 2 - backgroundPadding);
+    var msText3 = new lime.Label().setText('s').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(72).
+        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding, (artRect.height + padding) * 2);
 
-    var msText4 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding, 0 - backgroundPadding);
+    var msText4 = new lime.Label().setText('s').setFontFamily(rb.GAME.FONT).setFontColor(level1.TEXT_HIGHLIGHT_COLOR).setFontSize(72).
+        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding, 0);
 
-    var msText5 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding, (artRect.height + padding) - backgroundPadding);
+    var msText5 = new lime.Label().setText('s').setFontFamily(rb.GAME.FONT).setFontColor(level2.TEXT_HIGHLIGHT_COLOR).setFontSize(72).
+        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding, (artRect.height + padding));
 
-    var msText6 = new lime.Label().setText('ms').setFontFamily(rb.GAME.FONT).setFontColor('#ffffff').setFontSize(36).
-        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding, (artRect.height + padding) * 2 - backgroundPadding);  
+    var msText6 = new lime.Label().setText('s').setFontFamily(rb.GAME.FONT).setFontColor(level3.TEXT_HIGHLIGHT_COLOR).setFontSize(72).
+        setAlign('right').setAnchorPoint(0, 0).setSize(artRect.width, artRect.height).setPosition(0 - backgroundPadding, (artRect.height + padding) * 2);  
 
 
     artColumn.appendChild(yourARTHeading, 1);
@@ -227,14 +226,23 @@ rb.GameEnd = function(level1, level2, level3, eventTarget) {
     this.topARTText3.setFontColor(level3.TEXT_HIGHLIGHT_COLOR);
 
     if(level1.art <= level1.bestART)
+    {
         this.artText1.setFontColor(level1.TEXT_HIGHLIGHT_COLOR);
-
+        msText1.setFontColor(level1.TEXT_HIGHLIGHT_COLOR);
+    }    
+        
     if(level2.art <= level2.bestART)
+    {
         this.artText2.setFontColor(level2.TEXT_HIGHLIGHT_COLOR);
-
+        msText2.setFontColor(level2.TEXT_HIGHLIGHT_COLOR);
+    }    
+        
     if(level3.art <= level3.bestART)
-        this.artText3.setFontColor(level3.TEXT_HIGHLIGHT_COLOR)
-
+    {
+        this.artText3.setFontColor(level3.TEXT_HIGHLIGHT_COLOR);
+        msText3.setFontColor(level3.TEXT_HIGHLIGHT_COLOR);
+    }    
+        
     this.restartButton = new rb.TileButton.type("scores", eventTarget, rb.NAV.RESTART_UP, rb.NAV.RESTART_DOWN).setAnchorPoint(0.5, 0.5).setPosition(rb.WIDTH * 0.25, rb.GAME.BUTTON_Y);
     layer.appendChild(this.restartButton, 8);
 

@@ -2,17 +2,15 @@ CACHE MANIFEST
 
 # If you use more files you need to manually list them here.
 # Don't remove next line
-# Updated on: 2013-05-30 15:54:33
+# Updated on: 2013-06-05 15:31:19
 
 batak_adv.js
-assets/startup.jpg
-assets/startup-ipad.png
 assets/touch-icon-ipad-precomposed.png
 assets/touch-icon-ipad-retina-precomposed.png
 assets/touch-icon-iphone-precomposed.png
 assets/touch-icon-iphone-retina-precomposed.png
-assets/splash1.png
-assets/splash2.png
+assets/splash1.gif
+assets/splash2.gif
 assets/reaction_test.png
 assets/gsk_logo.png
 assets/scientists_in_sport_logo.png
